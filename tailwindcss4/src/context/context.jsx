@@ -7,6 +7,9 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 import { TbSettingsUp } from "react-icons/tb";
 import { FaBus } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
+
 
 
 const MyContext = createContext()
@@ -59,7 +62,11 @@ function Context({children}){
             icon:<FaUserCheck className={'inline'}/>
         },
         {
-            
+            icon:<IoIosArrowBack />   
+        },
+        {
+            icon:<IoIosArrowForward />
+
         }
     ],
     jwtToken:JSON.parse(localStorage.getItem("jwtToken")),

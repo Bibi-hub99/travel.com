@@ -6,7 +6,7 @@ function PcSearchForm(){
     //form for handling search query and input displayed in PC
 
     return (
-        <form name={''} className={'bg-white absolute top-[76%] py-1 w-[90%] lg:w-[70%] ml-[5%] lg:ml-[15%] rounded-full shadow-xl/20'}>
+        <form name={''} className={'bg-white absolute top-[85%] py-1 w-[90%] lg:w-[70%] ml-[5%] lg:ml-[15%] rounded-full shadow-xl/20 hidden md:block'}>
 
             <div className={'w-[95%] m-auto relative'}>
                 <Input
