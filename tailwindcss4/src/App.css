@@ -1,4 +1,26 @@
 
 body{
   font-family:Raleway;
+  background-color:white;
+}
+
+.location-parent{
+  position:relative;
+}
+
+.location-info{
+  border-radius:.5rem;
+  position:absolute;
+  inset:0;
+  padding:.5rem;
+  box-sizing:border-box;
+  font-weight:bolder;
+}
+
+.slider-child{
+  width:25%;
+  background-color:yellow;
+  height:100%;
+  border-radius:2rem;
+  position:relative;
 }

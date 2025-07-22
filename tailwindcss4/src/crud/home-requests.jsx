@@ -23,7 +23,7 @@ export const homeRequests = () => {
     ])
    //const results = axios.get(`http://localhost:8888/offers`)
 
-    return defer({offers:results})//returing results in defer mode for rendering other parts of the application immediately excepts those needing them
+    return defer({results:results})//returing results in defer mode for rendering other parts of the application immediately excepts those needing them
 
 }
 

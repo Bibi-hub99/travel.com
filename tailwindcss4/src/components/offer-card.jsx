@@ -6,7 +6,7 @@ function OfferCard(props){
     const bgImage = `bg-[url(${props.imageURL})]`
 
     return (
-        <div className={'bg-no-repeat bg-cover bg-center py-10 px-2 box-border rounded-lg font-extrabold text-white text-shadow-black text-shadow-md relative '+ bgImage}>
+        <div className={`${bgImage} bg-no-repeat bg-cover bg-center py-10 px-2 box-border rounded-lg font-extrabold text-white text-shadow-black text-shadow-md relative`}>
             <div className={'text-left'}>
 
                 <p className={'text-[1rem]'}>{props.offerTitle}</p>
@@ -16,9 +16,10 @@ function OfferCard(props){
                     <p>R1000</p>
                 </div>
 
-                <Link to={`booking/${props.offerCategory}/${props.offerId}`} className={'absolute bottom-1 left-2 py-2 px-5 bg-blue-700 rounded-xl'}>Book Now</Link>
+                <Link to={`booking/categories/${props.offerCategory}/${props.offerId}`} className={'absolute bottom-1 left-2 py-2 px-5 bg-blue-700 rounded-xl'}>Book Now</Link>
                 
             </div>
+            
             
         </div>
     )
