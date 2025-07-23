@@ -11,7 +11,6 @@ const findServices = async(req,res,next) => {
     }
 }
 
-<<<<<<< HEAD
 const findByCategory = async(req,res,next) => {
     try{
         const queryObj = {}
@@ -25,6 +24,3 @@ const findByCategory = async(req,res,next) => {
 }
 
 module.exports = {findServices,findByCategory}
-=======
-module.exports = {findServices}
->>>>>>> 13e4cc9baf2b264211d2851db4edc10a43ffb5a4

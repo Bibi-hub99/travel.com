@@ -1,3 +1,9 @@
+const stopEnterSubmit = (evt)=>{
+    if(evt.key === "Enter"){
+        evt.preventDefault()
+    }
+}
+
 function Input(props){
     //component for building input html tag dynaimally
     return (
@@ -5,7 +11,9 @@ function Input(props){
          name={props.inputName} 
          className={`${props.inputStyle}`} 
          value={props.inputValue}
-         placeholder={props.inputPlaceholder}/>
+         placeholder={props.inputPlaceholder}
+         onChange={props.inputChange}
+         onKeyDown={stopEnterSubmit}/>
     )
 } 
 
