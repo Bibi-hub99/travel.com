@@ -8,7 +8,22 @@ import ServiceStayCard from "../components/service-staycard"
 function CategoryIndex(){
 
     const [servicesOffered,setServicesOffered] = useState([])
+    const [searchResults,setSearchResults]= useState([])
     const [isLoading,setIsLoading] = useState(false)
+    const [searchText,setSearchText] = useState("")
+
+    const handleChange = (evt)=>{
+
+        const {value} = evt.target
+        setSearchText(value)
+
+    }
+
+    const searchResultsUl = searchResults.length > 0 ? searchResults.map((each)=>{
+        return (
+            <li>{each.title}</li>
+        )
+    }):<li>no results</li>
 
     useEffect(()=>{
 
@@ -27,13 +42,21 @@ function CategoryIndex(){
 
     },[])
 
+
+
+    //loader component to display while fetching data from the server
+
     if(isLoading){
         return <ComponentLoader/>
     }
 
     return (
         <div>
-            <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'}/>
+            <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'} inputValue={searchText} inputChange={handleChange}>
+                {
+                    <p>hello</p>
+                }
+            </SearchForm>
             <div className={'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
                 {
                     servicesOffered.map((each)=>{
@@ -51,8 +74,8 @@ function CategoryIndex(){
                         city={each.location.city}
                         price={each.price}
                         description={each.description}
-                        serviceURL={`service/information/${each._id}`}
-                        bookingURL={`../service/booking-type/${each._id}?category=${each.category}`}
+                        serviceURL={`service/information/${each._id}?serviceType=${each.category}`}
+                        bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}`}
                         isRelative={true}
                         imageStyle={'h-full w-full object-cover rounded-xl'}
                         infoStyle={'py-2 px-1 font-bold'}/>

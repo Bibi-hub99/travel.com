@@ -57,6 +57,7 @@ function AllServicesPage(){
                                             cardStyle={cardStyle}
                                             imageContainerStyle={imageContainerStyle}
                                             imageURL={each.imageURL}
+                                            title={each.title}
                                             price={each.price}
                                             depart={`${each.location.country}, ${each.location.country}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
