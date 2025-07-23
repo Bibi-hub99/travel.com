@@ -1,13 +1,26 @@
 import Button from "./button"
 import Input from "./input"
+import {useMyContext} from "../context/context"
 
 function SearchForm(props){
 
+    const [value] = useMyContext()
+
     return (
         <form name={'search-form'} className={props.formStyle}>
-            <Input
-            inputType={'text'}
-            inputStyle={'border-1 w-[100%] py-2 rounded-xl'}/>
+            <div className={'flex justify-between'}>
+
+                <Input
+                inputType={'text'}
+                inputStyle={'border-1 w-[84%] py-2 rounded-xl outline-none px-2 box-border'}/>
+
+                <Button
+                btnType={'button'}
+                btnInnerText={value.icons[0].icon}
+                btnStyle={'bg-black text-white w-[15%] rounded-xl cursor-pointer'}
+                />
+
+            </div>
         </form>
     )
 

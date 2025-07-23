@@ -19,14 +19,11 @@ const serviceSchema = new mongoose.Schema({
     }
 })
 
-<<<<<<< HEAD
 serviceSchema.statics.findByCategory = async function findByCategory(queryObj){
     const services = await this.find(queryObj)
     return services
 }
 
-=======
->>>>>>> 13e4cc9baf2b264211d2851db4edc10a43ffb5a4
 const serviceModel = mongoose.model("services",serviceSchema,"services")
 
 module.exports = serviceModel

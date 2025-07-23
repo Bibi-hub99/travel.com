@@ -31,6 +31,7 @@ function AllServicesPage(){
                                     servicesOffered.map((each)=>{
 
                                         const cardStyle = 'bg-white shadow-gray-400 shadow-xl/30 p-2 box-border p-4 rounded-xl'
+
                                         const imageContainerStyle = 'h-[300px] md:h-[200px] relative'
 
                                         return (
