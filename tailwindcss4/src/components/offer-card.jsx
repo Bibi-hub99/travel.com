@@ -3,10 +3,11 @@ import {Link} from "react-router-dom"
 
 function OfferCard(props){
 
-    const bgImage = `bg-[url(${props.imageURL})]`
+    const image = props.imageURL
+    const bgImage = `bg-[url(${image})]`
 
     return (
-        <div className={`${bgImage} bg-no-repeat bg-cover bg-center py-10 px-2 box-border rounded-lg font-extrabold text-white text-shadow-black text-shadow-md relative`}>
+        <div className={`bgImage bg-no-repeat bg-cover bg-center py-10 px-2 box-border rounded-lg border-2 font-extrabold text-white text-shadow-black text-shadow-md relative`}>
             <div className={'text-left'}>
 
                 <p className={'text-[1rem]'}>{props.offerTitle}</p>

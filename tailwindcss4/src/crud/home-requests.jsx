@@ -1,17 +1,17 @@
 import axios from "axios"
 
-const baseURL = import.meta.env.VITE_Base_URL
+const baseURL = import.meta.env.VITE_BASE_URL
 import {defer} from "react-router-dom"
 
 //handles offer related http requests to the server and response form the server
 //hand homepage requests, request made on home page
 
 const findOffers = ()=>{
-    return axios.get('http://localhost:8888/offers')
+    return axios.get(`${baseURL}/offers`)
 }
 
 const findDestinations =  () =>{
-    return axios.get('http://localhost:8888/locations')
+    return axios.get(`${baseURL}/locations`)
 }
 
 export const homeRequests = () => {

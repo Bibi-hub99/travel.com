@@ -6,9 +6,16 @@ import { IoIosHome } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 import { TbSettingsUp } from "react-icons/tb";
-import { FaBus } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { FaHouse } from "react-icons/fa6";
+import { IoAirplane } from "react-icons/io5";
+import { FaBusAlt } from "react-icons/fa";
+import { TbBuildingCircus } from "react-icons/tb";
+import { FaPlaneDeparture } from "react-icons/fa";
+import { FaPlaneArrival } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 
 
@@ -45,6 +52,7 @@ function Context({children}){
         }*/
     ],
     containerStyle:'w-[98%] m-auto',//for styling width in components giving them a 98% and aligning them equally,
+    universaltMt:"mt-20",
     icons:[
         {
             icon:<IoIosSearch className={'inline'}/>,
@@ -62,11 +70,35 @@ function Context({children}){
             icon:<FaUserCheck className={'inline'}/>
         },
         {
-            icon:<IoIosArrowBack />   
+            icon:<IoIosArrowBack className={'inline'}/>   
         },
         {
-            icon:<IoIosArrowForward />
+            icon:<IoIosArrowForward className="inline"/>
 
+        },
+        {
+            icon:<FaHouse className={'inline text-[1.5rem]'}/>
+        },
+        {
+            icon:<IoAirplane className={"inline text-[1.5rem]"}/>
+        },
+        {
+            icon:<FaBusAlt className={"inline text-[1.5rem]"}/>
+        },
+        {
+            icon:<TbBuildingCircus className={"inline text-[1.5rem]"}/>
+        },
+        {
+            icon:<FaPlaneDeparture className={'inline'}/>
+        },
+        {
+            icon:<FaPlaneArrival className={'inline'}/>
+        },
+        {
+            icon:<FaHeart className={'inline'}/>
+        },
+        {
+            icon:<FaEye className={'inline'}/>
         }
     ],
     jwtToken:JSON.parse(localStorage.getItem("jwtToken")),
