@@ -1,4 +1,4 @@
-function OfferLoader(){
+function ComponentLoader(){
 
     function MockUp (){
 
@@ -29,4 +29,4 @@ function OfferLoader(){
 
 }
 
-export default OfferLoader
+export default ComponentLoader

@@ -3,7 +3,7 @@ import Trends from '../components/trends'
 import {Link,Await,useLoaderData} from "react-router-dom"
 import {Suspense,useState,useEffect} from "react"
 import {useMyContext} from "../context/context"
-import OfferLoader from "../loaders/offer-loader"
+import ComponentLoader from "../loaders/component-loader"
 import OfferCard from "../components/offer-card"
 import DestinationCard from "../components/destination-card"
 import ServiceTypeCard from "../components/service-types-card" 
@@ -19,8 +19,6 @@ function Home(){
     const {results} = useLoaderData()
     const [availableOffers,setAvailableOffers] = useState([])//for storing offers once request is complete
     const [trendingDestinations,setTrendingDestinations] = useState([])//for storing trending locations once request is complete
-
-    console.log(availableOffers)
 
     const [value,logOut,isLogged] = useMyContext()//import from Context API
 
@@ -47,10 +45,11 @@ function Home(){
         )
     })
 
+
     return (
 
 
-        <Suspense fallback={<OfferLoader/>}>
+        <Suspense fallback={<ComponentLoader/>}>
 
             <Await resolve={results}>
                 {
@@ -61,6 +60,7 @@ function Home(){
                                 <div>
                                     {/*setting the values of states before working with them,they derive from a  promise all function hence the arrays format */}
                                     {
+                                        
                                         useEffect(()=>{
                                             setAvailableOffers(response[0].data.offers)
                                             setTrendingDestinations(response[1].data.locations)
