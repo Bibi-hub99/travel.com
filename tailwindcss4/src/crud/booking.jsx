@@ -10,8 +10,17 @@ export const findServices = async()=>{
     return defer({services:services})
 }
 
-export const findByCategory = async(category,search)=>{
-    const services = axios.get(`${baseURL}/services/categories/?category=${category}&search=${search}`)
+export const findByCategory = async(category)=>{
+    const services = axios.get(`${baseURL}/services/categories?category=${category}`)
     return services
 }
 
+export const searchService = async(searchTerm,category) => {
+    const services = axios.get(`${baseURL}/services/search?searchTerm=${searchTerm}&category=${category}`)
+    return services
+}
+
+export const findSingleService = async(serviceID) => {
+    const service = axios.get(`${baseURL}/services/service/${serviceID}`)
+    return service
+}

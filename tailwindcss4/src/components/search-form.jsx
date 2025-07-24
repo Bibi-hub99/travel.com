@@ -21,14 +21,11 @@ function SearchForm(props){
                 btnType={'button'}
                 btnInnerText={value.icons[0].icon}
                 btnStyle={'bg-black text-white w-[15%] rounded-xl cursor-pointer'}
+                handleClick={props.handleSubmit}
                 />
 
             </div>
-            <div className={'relative'}>
-                <div className={'bg-gray-200 mt-1 w-[84%] p-2 box-border rounded absolute'} style={{zIndex:'7'}}>
-                    {props.children}
-                </div>
-            </div>
+
         </form>
     )
 
