@@ -24,6 +24,16 @@ serviceSchema.statics.findByCategory = async function findByCategory(queryObj){
     return services
 }
 
+serviceSchema.statics.searchServices = async function searchServices(queryObj){
+    const services = await this.find(queryObj)
+    return services
+}
+
+serviceSchema.statics.findSingleService = async function findSingleService(id){
+    const service = await this.findById(id)
+    return service
+}
+
 const serviceModel = mongoose.model("services",serviceSchema,"services")
 
 module.exports = serviceModel
