@@ -59,7 +59,7 @@ function AllServicesPage(){
                                             imageURL={each.imageURL}
                                             title={each.title}
                                             price={each.price}
-                                            depart={`${each.location.country}, ${each.location.country}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
+                                            depart={`${each.location.country}, ${each.location.city}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
                                             serviceURL={`service/information/${each._id}?serviceType=${each.category}`}
                                             bookingURL={`service/booking-type/${each._id}?bookingType=${each.category}`}

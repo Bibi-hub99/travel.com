@@ -1,6 +1,6 @@
 import PcSearchForm from "../components/pc-search-form"
 import Trends from '../components/trends'
-import {Link,Await,useLoaderData} from "react-router-dom"
+import {Link,Await,useLoaderData,useOutletContext} from "react-router-dom"
 import {Suspense,useState,useEffect} from "react"
 import {useMyContext} from "../context/context"
 import ComponentLoader from "../loaders/component-loader"
@@ -16,6 +16,7 @@ import HomeLogin from "../components/home-login"
 
 function Home(){
 
+    const [searchText,handleChange,handleSearch] = useOutletContext()
     const {results} = useLoaderData()
     const [availableOffers,setAvailableOffers] = useState([])//for storing offers once request is complete
     const [trendingDestinations,setTrendingDestinations] = useState([])//for storing trending locations once request is complete
@@ -88,7 +89,7 @@ function Home(){
                                     </div>
 
                                     {/*Pc search form displayed in home page for query */}
-                                    <PcSearchForm/>
+                                    <PcSearchForm inputValue={searchText} handleSearch={handleSearch} handleChange={handleChange}/>
 
                                 </div>
 

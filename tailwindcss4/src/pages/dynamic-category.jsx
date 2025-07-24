@@ -67,7 +67,7 @@ export default function DynamicCategory(){
     return (
         <div className={''}>
 
-            {false && <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'}/>}
+            {!isEq && <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'}/>}
                 {isEq && <Button
                 btnInnerText={`${toggleState.btnInnerText}`}
                 btnStyle={'bg-blue-400 w-[100%] py-2 my-2 box-border cursor-pointer'}

@@ -13,6 +13,9 @@ const CategoryPage = lazy(()=>import("../pages/category-page"))
 const DynamicCategory  = lazy(()=>import("../pages/dynamic-category"))
 const AllServicesPage = lazy(()=>import("../pages/all-services"))
 const CategoryIndex = lazy(()=>import("../pages/category-index"))
+const SingleServicePage = lazy(()=>import("../pages/single-service"))
+const ServiceInfoPage = lazy(()=>import("../pages/service-informationPage"))
+const SearchPage = lazy(()=>import("../pages/search-page"))
 
 const routerPages = createBrowserRouter([
     {
@@ -71,6 +74,40 @@ const routerPages = createBrowserRouter([
                 ]
             },
         ]
+    },
+    {
+        path:'booking/service/information/:serviceID',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                    <SingleServicePage urlLink={'../../..'} isRelative={true}/>
+                </Suspense>
+        ),
+        children:[
+            {
+                index:true,
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <ServiceInfoPage/>
+                    </Suspense>
+                )
+            }
+        ]
+    },
+    {
+        path:'booking/categories/service/information/:serviceID',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                <SingleServicePage urlLink={'../../..'} isRelative={true}/>
+            </Suspense>
+        )
+    },
+    {
+        path:'services/search',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                <SearchPage/>
+            </Suspense>
+        )
     }
 ])
 

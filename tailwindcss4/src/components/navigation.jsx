@@ -1,9 +1,7 @@
-import {NavLink,Link} from "react-router-dom"
+import {NavLink} from "react-router-dom"
 import {useMyContext} from "../context/context"
-import Button from "./button"
 
-
-function Navigation(){
+function Navigation(props){
 
     const [value,LogOut,isLoggedIn] = useMyContext()
     
@@ -48,8 +46,8 @@ function Navigation(){
                 </div>
 
                 <div className={'w-[30%] text-end md:hidden'}>
-                    <button className={`${btnStyle} mr-5`} >{icons[0].icon}</button>
-                    <button className={`${btnStyle} mr-2`}>{icons[1].icon}</button>                
+                    <button className={`${btnStyle} mr-5`} onClick={()=>props.toggleForm(props.state)}>{icons[0].icon}</button>
+                    <button className={`${btnStyle} mr-2`} onClick={()=>props.handleSlideWidth(100)}>{icons[1].icon}</button>                
                 </div>
 
             </div>
