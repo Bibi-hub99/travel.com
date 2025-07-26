@@ -152,6 +152,17 @@ function SearchPage(){
                     btnInnerText={value.icons[0].icon}
                     btnStyle={'absolute top-6 right-3 bg-blue-600 py-1 px-4 rounded-xl cursor-pointer'}/>
 
+                    <br></br>
+                    <br></br>
+
+                    <div className={''}>
+                        <p>Filters</p>
+                        <input type={'checkbox'}></input>
+                        <label> 0 to R1000</label><br></br>
+                        <input type={'checkbox'}></input>
+                        <label> R1000 to R2000</label>
+                    </div>
+
                 </div>
 
                 <div className={'lg:w-[73%] lg:pt-5 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4'}>
