@@ -13,6 +13,9 @@ function Input(props){
          value={props.inputValue}
          placeholder={props.inputPlaceholder}
          onChange={props.inputChange}
+         onKeyUp={props.onKeyUp}
+         onBlur={props.onBlur}
+         onFocus={props.onFocus}
          onKeyDown={stopEnterSubmit}/>
     )
 } 

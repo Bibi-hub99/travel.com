@@ -3,6 +3,8 @@ import Layout from "../layout/layout"
 import Home from "../pages/home"
 import {Suspense,lazy} from "react"
 import Loading from "../loaders/loading"
+import ServiceProviderSignUp from "../pages/service-provider-signUp"
+import UserSignUp from "../pages/user-sign-form"
 
 import {homeRequests} from "../crud/home-requests"
 import {findServices} from "../crud/booking"
@@ -16,6 +18,8 @@ const CategoryIndex = lazy(()=>import("../pages/category-index"))
 const SingleServicePage = lazy(()=>import("../pages/single-service"))
 const ServiceInfoPage = lazy(()=>import("../pages/service-informationPage"))
 const SearchPage = lazy(()=>import("../pages/search-page"))
+const LoginPage = lazy(()=>import("../pages/login"))
+const SignUpPage = lazy(()=>import("../pages/sign-up"))
 
 const routerPages = createBrowserRouter([
     {
@@ -108,6 +112,32 @@ const routerPages = createBrowserRouter([
                 <SearchPage/>
             </Suspense>
         )
+    },
+    {
+        path:'login',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                <LoginPage/>
+            </Suspense>
+        )
+    },
+    {
+        path:'sign-up',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                <SignUpPage/>
+            </Suspense>
+        ),
+        children:[
+            {
+                index:true,
+                element:<UserSignUp/>
+            },
+            {
+                path:'service-provider',
+                element:<ServiceProviderSignUp/>
+            }
+        ]
     }
 ])
 
