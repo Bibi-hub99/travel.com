@@ -3,6 +3,7 @@ import Input from "../components/input"
 import Button from "../components/button"
 import PasswordBanner from "../components/password-banner"
 import {isEmailValid,isPassValid} from "../utils/validations-utils"
+import {createClientAccount} from "../crud/users"
 import {useState} from "react"
 
 function UserSignUp(){
@@ -19,8 +20,10 @@ function UserSignUp(){
 
     const [userData,setUserData] = useState({
         email:"",
-        password:""
+        password:"",
+        accountType:"client"
     })
+
 
 
     const handleChange = (evt)=>{
@@ -33,12 +36,18 @@ function UserSignUp(){
         })
     }
 
-    const handleSubmit = (evt)=>{
+    const handleSubmit = async(evt)=>{
         evt.preventDefault()
-        if(isEmailValid(userData.email)){
-            if(isPassValid(userData.password)){
-                console.log('registered')
+        try{
+            const {email,password,accountType} = userData
+            if(isEmailValid(email)){
+                if(isPassValid(password)){
+                    const {data} = await createClientAccount({email,password,accountType})
+                    console.log(data)
+                }
             }
+        }catch(err){
+            console.log(err)
         }
     }
 

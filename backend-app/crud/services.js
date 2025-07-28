@@ -2,6 +2,7 @@ const serviceModel = require("../models/services")
 
 //middlewares for services request and database queries
 
+
 const findServices = async(req,res,next) => {
     try{
         const services = await serviceModel.find({})

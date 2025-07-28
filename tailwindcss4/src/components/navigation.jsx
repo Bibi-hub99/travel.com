@@ -1,11 +1,20 @@
-import {NavLink} from "react-router-dom"
+import {NavLink,useLocation} from "react-router-dom"
 import {useMyContext} from "../context/context"
+import {useEffect,useState} from "react"
+import {isLoggedIn} from "../utils/auth"
 
 function Navigation(props){
 
-    const [value,LogOut,isLoggedIn] = useMyContext()
-    
-    const isLogged = isLoggedIn()//checks if user is logged in and decide the links to route to
+    const location = useLocation()
+
+    const [value] = useMyContext()
+    const [userLogged,setUserLogged] = useState(false)
+
+    useEffect(()=>{
+        setUserLogged(isLoggedIn())
+    },[location])
+
+    //checks if user is logged in and decide the links to route to
 
     const {navLinks,containerStyle,icons} = value //import of navlinks and width styling from global context api
     //also importing searchIcon and menuIcon
@@ -41,7 +50,7 @@ function Navigation(props){
                     <NavLink to={'.'} className={({isActive}) => isActive ? activeLink:inActiveLink}>Home</NavLink>
                     {mapsLinks}
                     {
-                        <NavLink to={isLogged ? 'account':'login'} className={({isActive}) => isActive ? activeLink:inActiveLink}>{isLogged ? icons[4].icon:icons[3].icon}</NavLink>
+                        <NavLink to={userLogged ? 'account':'login'} className={({isActive}) => isActive ? activeLink:inActiveLink}>{userLogged ? icons[4].icon:icons[3].icon}</NavLink>
                     }
                 </div>
 

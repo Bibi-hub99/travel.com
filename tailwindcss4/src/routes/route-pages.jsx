@@ -8,6 +8,7 @@ import UserSignUp from "../pages/user-sign-form"
 
 import {homeRequests} from "../crud/home-requests"
 import {findServices} from "../crud/booking"
+import BookingService from "../pages/booking-service"
 
 
 const BookingPage = lazy(()=>import("../pages/booking-page"))
@@ -20,6 +21,7 @@ const ServiceInfoPage = lazy(()=>import("../pages/service-informationPage"))
 const SearchPage = lazy(()=>import("../pages/search-page"))
 const LoginPage = lazy(()=>import("../pages/login"))
 const SignUpPage = lazy(()=>import("../pages/sign-up"))
+const BookService = lazy(()=>import("../pages/booking-service"))
 
 const routerPages = createBrowserRouter([
     {
@@ -138,6 +140,14 @@ const routerPages = createBrowserRouter([
                 element:<ServiceProviderSignUp/>
             }
         ]
+    },
+    {
+        path:"booking/service/booking-type/:serviceID",
+        element:(
+            <Suspense>
+                <BookingService/>
+            </Suspense>
+        )
     }
 ])
 

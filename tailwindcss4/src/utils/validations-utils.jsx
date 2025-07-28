@@ -1,4 +1,3 @@
-
 export const isEmailValid = (email) => {
 
     const emailAccount = `${email}`
@@ -10,20 +9,16 @@ export const isEmailValid = (email) => {
                 if(emailAccount.includes('@gmail.com')){
                     return true
                 }else{
-                    console.log("email must include @gmail")
-                    return false
+                    throw "email must include @gmail"
                 }
             }else{
-                console.log("email must have 10 chars or more")
-                return false
+                throw "email must have 10 chars or more"
             }
         }else{
-            console.log("email must begin with letter")
-            return false
+            throw "email must begin with letter"
         }
     }else{
-        console.log('enter email')
-        return false
+        throw 'enter email'
     }
 
 }
@@ -40,25 +35,21 @@ export const isPassValid = (password) => {
                     if(userPassword.length >= 8){
                         return true
                     }else{
-                        console.log('must have 8 chars')
+                        throw `password must have 8 chars`
                     }
                 }else{
-                    console.log("must have numbers")
-                    return false
+                    throw "password must have at least one number"
                 }
 
             }else{
-                console.log('must have lowercase')
-                return false
+                throw 'must have lowercase'
             }
 
         }else{
-            console.log('must have uppercase')
-            return false
+            throw 'must have uppercase'
         }
     }else{
-        console.log('enter password')
-        return false
+        throw 'enter password'
     }
 }
 
@@ -66,9 +57,6 @@ export const isNotEmpty = (input,inputName) =>{
     const inputValue = `${input}`
     if(inputValue.trim() !==""){
         return true
-    }else{
-        console.log('enter '+inputName)
-        return false
     }
 }
 
@@ -76,9 +64,6 @@ export const isLetter = (input) => {
     const inputValue = `${input}`
     if(!inputValue.match(/[0-9]/g)){
         return true
-    }else{
-        console.log('must start with a letter')
-        return false
     }
 }
 
@@ -88,16 +73,28 @@ export const isNamesValid = (input,inputName) =>{
     if(isNotEmpty(inputValue,inputName)){
         if(isLetter(input)){
             return true
+        }else{
+            throw `${inputName} must contain only letters`
         }
+    }else{
+        throw `Enter your ${inputName}`
     }
 
 }
 
-export const isNumberValid = (input) => {
+export const isNumberValid = (input,inputName) => {
     const inputValue = `${input}`
-    if(isNotEmpty(inputValue)){
+    if(isNotEmpty(inputValue,inputName)){
         if(!isNaN(inputValue)){
-            return true
+            if(inputValue.length === 10){
+                return true
+            }else{
+                throw `${inputName} must have 10 digits`
+            }
+        }else{
+            throw `${inputName} must have digits only`
         }
+    }else{
+        throw `Enter ${inputName}`
     }
 }

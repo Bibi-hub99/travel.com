@@ -1,4 +1,4 @@
-import {createContext,useContext,useState,useEffect} from "react"
+import {createContext,useContext,useState} from "react"
 import moment from "moment"
 import { IoIosSearch } from "react-icons/io";
 import { HiBars3 } from "react-icons/hi2";
@@ -100,31 +100,15 @@ function Context({children}){
         {
             icon:<FaEye className={'inline'}/>
         }
-    ],
-    jwtToken:JSON.parse(localStorage.getItem("jwtToken")),
-    expireIn:JSON.parse(localStorage.getItem("expireIn"))
+    ]
     })
 
-    const LogOut = () =>{
-        localStorage.removeItem("jwtToken")
-        localStorage.removeItem("expireIn")
-    }
-
-    const isLoggedIn = ()=>{
-
-        const expireIn = value.expireIn
-        const expireInMoment = moment(expireIn)
-
-        const isExpired = moment().isBefore(expireInMoment)
-        return isExpired
-
-    }
 
     //shared state amongst all components and pages of the application
     //made it an object to avoid repeating some parts of code especially navlinks and icon importing
 
     return (
-        <MyContext.Provider value={[value,LogOut,isLoggedIn]}>
+        <MyContext.Provider value={[value]}>
             {children}
         </MyContext.Provider>
     )

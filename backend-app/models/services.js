@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 //model for perfoming read and writes on database on services collections
 
 

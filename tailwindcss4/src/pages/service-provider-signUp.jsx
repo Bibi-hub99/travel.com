@@ -2,8 +2,9 @@
 import Input from "../components/input"
 import Button from "../components/button"
 import PasswordBanner from "../components/password-banner"
-import {isNamesValid,isNumberValid} from "../utils/validations-utils.jsx"
+import {isEmailValid, isNamesValid,isNumberValid, isPassValid} from "../utils/validations-utils.jsx"
 import {useState} from "react"
+import { createServiceAccount } from "../crud/users.jsx"
 
 function ServiceProviderSignUp(){
 
@@ -22,7 +23,8 @@ function ServiceProviderSignUp(){
         surname:"",
         telephone:"",
         email:"",
-        password:""
+        password:"",
+        accountType:"service_provider"
     })
 
     const trackPassValidity = ()=>{
@@ -92,9 +94,24 @@ function ServiceProviderSignUp(){
     }
 
     const validateForm = ()=>{
-        if(isNamesValid(userData.firstNames,"First Names")){
-            return true
-        }
+        
+            if(isNamesValid(userData.firstNames,"First Names")){
+
+                if(isNamesValid(userData.surname,"Surname")){
+
+                    if(isNumberValid(userData.telephone,"Cellphone")){
+                        
+                        if(isEmailValid(userData.email)){
+                            if(isPassValid(userData.password)){
+                                return true
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
     }
 
     const handleChange = (evt) => {
@@ -109,10 +126,16 @@ function ServiceProviderSignUp(){
 
     }
 
-    const handleSubmit = (evt)=>{
+    const handleSubmit = async(evt)=>{
         evt.preventDefault()
-        if(validateForm()){
-            console.log('names valid')
+        try{
+            if(validateForm()){
+                const {firstNames,surname,telephone,email,password,accountType} = userData
+                const {data} = await createServiceAccount({firstNames,surname,telephone,email,password,accountType})
+                console.log(data)
+            }
+        }catch(err){
+            console.log(err)
         }
     }
 
@@ -147,12 +170,6 @@ function ServiceProviderSignUp(){
                     />
                     <br></br>
                     <br></br>
-                    <Input
-                    inputType={'date'}
-                    inputName={'dateOfBirth'}
-                    inputStyle={commonStyle}
-                    inputChange={handleChange}
-                    />
                 </fieldset>
 
                 <fieldset className={'border-1 p-2 box-border'}>

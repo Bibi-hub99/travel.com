@@ -1,18 +1,19 @@
 //returns a login page in the app
-
 import { FaUserEdit } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Input from "../components/input"
 import Button from "../components/button"
-import {useNavigate,Link} from "react-router-dom"
+import {useNavigate,Link,Navigate} from "react-router-dom"
 import {useState,useEffect} from "react"
+import {accountLogin} from "../crud/users"
+import moment from "moment"
 
 function LoginPage(){
 
     const navigate = useNavigate()
 
     const [credentials,setCredentials] = useState({
-        username:'',
+        email:'',
         password:''
     })
 
@@ -21,6 +22,7 @@ function LoginPage(){
     }
 
     const handleChange = (evt) => {
+
         const {name,value} = evt.target
         setCredentials((oldValue)=>{
             return {
@@ -28,11 +30,31 @@ function LoginPage(){
                 [name]:value
             }
         })
+
     }
 
-    const handleSubmit = (evt)=>{
+    const handleSubmit = async(evt)=>{
+
         evt.preventDefault()
-        console.log("log in")
+
+        try{
+
+            const {email,password} = credentials
+            const {data} = await accountLogin({email,password})
+            console.log(data)
+            const expIn = data.payload.expIn
+            const bearerToken = data.payload.token
+            const tokenValidity = moment().add(expIn, 'days')
+            
+            localStorage.setItem("jwtToken",JSON.stringify(bearerToken))
+            localStorage.setItem("expireIn",JSON.stringify(tokenValidity.valueOf()))
+            
+            navigate('..')
+        
+            
+        }catch(err){
+            console.log(err)
+        }
     }
 
     return (
@@ -53,8 +75,8 @@ function LoginPage(){
                                 <label className={'bg-blue-400 w-[20%] border-1 text-[1.8rem] text-center rounded-l-xl'}><FaUserEdit className={'inline text-[1.9rem]'}/></label>
                                 <Input
                                 inputType={'text'}
-                                inputName={'username'}
-                                inputValue={credentials.username}
+                                inputName={'email'}
+                                inputValue={credentials.email}
                                 inputChange={handleChange}
                                 inputStyle={'border-1 rounded-r-xl outline-none w-[80%] px-2 box-border'}/>
                             </div>
