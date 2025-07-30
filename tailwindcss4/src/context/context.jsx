@@ -1,5 +1,4 @@
 import {createContext,useContext,useState} from "react"
-import moment from "moment"
 import { IoIosSearch } from "react-icons/io";
 import { HiBars3 } from "react-icons/hi2";
 import { IoIosHome } from "react-icons/io";
@@ -27,6 +26,8 @@ export const useMyContext = ()=>{
 }
 
 function Context({children}){
+
+    
 
     const [value,setValue] = useState({
         navLinks:[
@@ -103,12 +104,14 @@ function Context({children}){
     ]
     })
 
+    const [jwtToken,setJwtToken] = useState(JSON.parse(localStorage.getItem("jwtToken")))
+    const [expIn,setExpIn] = useState(JSON.parse(localStorage.getItem("expireIn")))
 
     //shared state amongst all components and pages of the application
     //made it an object to avoid repeating some parts of code especially navlinks and icon importing
 
     return (
-        <MyContext.Provider value={[value]}>
+        <MyContext.Provider value={[value,jwtToken,setJwtToken,expIn,setExpIn]}>
             {children}
         </MyContext.Provider>
     )

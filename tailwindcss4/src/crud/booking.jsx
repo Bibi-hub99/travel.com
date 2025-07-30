@@ -2,11 +2,9 @@
 
 import axios from "axios"
 import {defer} from "react-router-dom"
-import {getToken} from "../utils/auth"
 const baseURL = import.meta.env.VITE_BASE_URL
 
-const jwtToken = getToken()
-console.log(jwtToken)
+const jwtToken = JSON.parse(localStorage.getItem("jwtToken"))
 
 export const findServices = async()=>{
     const services = axios.get(`${baseURL}/services`)
@@ -28,7 +26,12 @@ export const findSingleService = async(serviceID) => {
     return service
 }
 
-export const bookService = async(serviceID) => {
-    const service = axios.get(`${baseURL}/protected/booking/service/${serviceID}`,{headers:{Authorization:jwtToken}})
+export const bookService = async(serviceID,token) => {
+    const service = axios.get(`${baseURL}/protected/booking/service/${serviceID}?token=${token}`,{headers:{Authorization:token}})
     return service
+}
+
+export const makeBooking = async(serviceID,token) => {
+    const response = axios.put(`${baseURL}/protected/booking/service/${serviceID}`,{jwtToken:token},{headers:{Authorization:token}})
+    return response
 }

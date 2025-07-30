@@ -22,7 +22,7 @@ const opts = {
 const verifyCallback = async(payload,done) => {
 
     try{
-
+        console.log(payload)
         const user = await userModel.findById(payload.sub)
         if(user){
             return done(null,user)

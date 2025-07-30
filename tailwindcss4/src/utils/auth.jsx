@@ -1,17 +1,13 @@
 import moment from "moment"
 
-export const isLoggedIn = () => {
+//function for checking if the jwt has not expired before granting access to a page for user to access
 
-    const expireIn = JSON.parse(localStorage.getItem("expireIn"))
+export const isLoggedIn = (expIn) => {
 
-    const expireInMoment = moment(expireIn)
-    
-    const isExpired = moment().isBefore(expireInMoment)
+    //const expireIn = JSON.parse(localStorage.getItem("expireIn"))
+
+    const expireInMoment = moment(expIn)
+    const isExpired = moment().isBefore(expireInMoment)    
     return isExpired
 
-}
-
-export const getToken = () => {
-    const token = JSON.parse(localStorage.getItem("jwtToken"))
-    return token
 }

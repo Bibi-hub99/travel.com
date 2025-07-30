@@ -7,12 +7,7 @@ function Navigation(props){
 
     const location = useLocation()
 
-    const [value] = useMyContext()
-    const [userLogged,setUserLogged] = useState(false)
-
-    useEffect(()=>{
-        setUserLogged(isLoggedIn())
-    },[location])
+    const [value,jwtToken,setjwtToken,expIn,setExpIn] = useMyContext()
 
     //checks if user is logged in and decide the links to route to
 
@@ -50,7 +45,7 @@ function Navigation(props){
                     <NavLink to={'.'} className={({isActive}) => isActive ? activeLink:inActiveLink}>Home</NavLink>
                     {mapsLinks}
                     {
-                        <NavLink to={userLogged ? 'account':'login'} className={({isActive}) => isActive ? activeLink:inActiveLink}>{userLogged ? icons[4].icon:icons[3].icon}</NavLink>
+                        <NavLink to={isLoggedIn(expIn) ? 'account':'login'} className={({isActive}) => isActive ? activeLink:inActiveLink}>{isLoggedIn(expIn) ? icons[4].icon:icons[3].icon}</NavLink>
                     }
                 </div>
 

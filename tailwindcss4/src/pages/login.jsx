@@ -6,6 +6,7 @@ import Button from "../components/button"
 import {useNavigate,Link,Navigate} from "react-router-dom"
 import {useState,useEffect} from "react"
 import {accountLogin} from "../crud/users"
+import {useMyContext} from "../context/context"
 import moment from "moment"
 
 function LoginPage(){
@@ -16,6 +17,8 @@ function LoginPage(){
         email:'',
         password:''
     })
+
+    const [value,jwtToken,setJwtToken,expIn,setExpIn] = useMyContext()
 
     const goBack = ()=>{
         navigate(-1)
@@ -36,26 +39,33 @@ function LoginPage(){
     const handleSubmit = async(evt)=>{
 
         evt.preventDefault()
-
         try{
 
             const {email,password} = credentials
             const {data} = await accountLogin({email,password})
-            console.log(data)
+
             const expIn = data.payload.expIn
             const bearerToken = data.payload.token
             const tokenValidity = moment().add(expIn, 'days')
             
-            localStorage.setItem("jwtToken",JSON.stringify(bearerToken))
-            localStorage.setItem("expireIn",JSON.stringify(tokenValidity.valueOf()))
-            
-            navigate('..')
+            const token = bearerToken
+            const expireIn = tokenValidity.valueOf()
+
+            setJwtToken(token)
+            localStorage.setItem("expireIn",JSON.stringify(expireIn))
+            setTimeout(()=>{
+                navigate('..')
+            },3000)
         
             
         }catch(err){
             console.log(err)
         }
     }
+
+    useEffect(()=>{
+        localStorage.setItem("jwtToken",JSON.stringify(jwtToken))
+    },[jwtToken])
 
     return (
         <div>

@@ -4,6 +4,7 @@ const ConnectDB = require("./database/connect")
 const express = require("express")
 const passport = require("passport")
 
+
 const OfferRouter = require("./routes/offer")
 const LocationRouter = require("./routes/locations")
 const ServiceRouter = require("./routes/services")
@@ -28,5 +29,9 @@ app.use('/not-authenticated',(req,res)=>{
     console.log('not authorized')
     res.status(401).json({success:false,message:'not authorized, login'})
 })
+
+
+
+// Create a test account or replace with real credentials.
 
 app.listen(8888,()=>console.log('started listening on port 8888....'))
