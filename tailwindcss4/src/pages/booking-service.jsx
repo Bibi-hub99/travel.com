@@ -13,8 +13,8 @@ function BookingService(){
 
         const findService = async(serviceID)=>{
             try{
-            const service = await bookService(serviceID)
-            console.log(service)
+            const {data} = await bookService(serviceID)
+            console.log(data)
             setFlashBang(true)
             }catch(err){
                 if(err.status === 401){
@@ -23,7 +23,7 @@ function BookingService(){
             }
         }
 
-        findService()
+        findService(serviceID)
 
     },[])
 
