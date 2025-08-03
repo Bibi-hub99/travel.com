@@ -17,21 +17,29 @@ app.use(cors())
 
 ConnectDB()
 
-require("./utils/passport")(passport)
 app.use(passport.initialize())
+require("./utils/passport")(passport)
 
 app.use('/offers',OfferRouter)
 app.use("/locations",LocationRouter)
 app.use("/services",ServiceRouter)
 app.use("/accounts",UserRouter)
 app.use("/protected",ProtectedRouter)
+
 app.use('/not-authenticated',(req,res)=>{
     console.log('not authorized')
-    res.status(401).json({success:false,message:'not authorized, login'})
+    res.status(401).json({success:false,message:'not authenticated for access, login'})
 })
 
-
+app.use('not-authorized',(req,res)=>{
+    res.status(402).json({success:false,message:'not authorized for action'})
+})
 
 // Create a test account or replace with real credentials.
+
+app.use((err,req,res,next)=>{
+    console.log(err.message)
+    res.status(401).json({success:false,message:'not '})
+})
 
 app.listen(8888,()=>console.log('started listening on port 8888....'))

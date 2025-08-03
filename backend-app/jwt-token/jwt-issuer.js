@@ -9,13 +9,14 @@ const privateKey = fs.readFileSync(path.join(__dirname,'..','private-key.pem'),"
 
 const createPayload = (user)=>{
 
-    const {id} = user
+    const {_id,accountType} = user
 
     const expireIn = 1
 
     const payload = {
-        sub:id,
-        iat:Date.now()
+        sub:_id,
+        iat:Date.now(),
+        accType:accountType
     }
 
     const token = jsonwebtoken.sign(payload,privateKey,{algorithm:"RS256",expiresIn:'1d'})

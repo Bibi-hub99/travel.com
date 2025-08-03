@@ -29,8 +29,10 @@ function BookingService(){
             }catch(err){
                 if(err.status === 401){
                     navigate('../login',{relative:'route'})
+                }else if(err.status === 403){
+                    console.log('user not permitted for resource')
                 }
-               console.log(err)
+               console.log(err.message + ' error')
             }
         }
 

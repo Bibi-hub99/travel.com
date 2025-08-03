@@ -24,8 +24,12 @@ function ServiceProviderSignUp(){
         telephone:"",
         email:"",
         password:"",
-        accountType:"service_provider"
+        accountType:"service_provider",
+        gender:"",
+        id_number:"",
     })
+
+    console.log(userData)
 
     const trackPassValidity = ()=>{
 
@@ -130,8 +134,8 @@ function ServiceProviderSignUp(){
         evt.preventDefault()
         try{
             if(validateForm()){
-                const {firstNames,surname,telephone,email,password,accountType} = userData
-                const {data} = await createServiceAccount({firstNames,surname,telephone,email,password,accountType})
+                const {firstNames,surname,telephone,email,password,accountType,id_number,gender} = userData
+                const {data} = await createServiceAccount({firstNames,surname,telephone,email,password,accountType,id_number,gender})
                 console.log(data)
             }
         }catch(err){
@@ -150,7 +154,8 @@ function ServiceProviderSignUp(){
                     inputName={'firstNames'}
                     inputStyle={commonStyle}
                     inputPlaceholder={'First Names'}
-                    inputChange={handleChange}/>
+                    inputChange={handleChange}
+                    inputValue={userData.firstNames}/>
                     <br></br>
                     <br></br>
                     <Input
@@ -158,7 +163,8 @@ function ServiceProviderSignUp(){
                     inputName={'surname'}
                     inputStyle={commonStyle}
                     inputPlaceholder={'Surname'}
-                    inputChange={handleChange}/>
+                    inputChange={handleChange}
+                    inputValue={userData.surname}/>
                     <br></br>
                     <br></br>
                     <Input
@@ -167,8 +173,23 @@ function ServiceProviderSignUp(){
                     inputStyle={commonStyle}
                     inputPlaceholder={'0735861123'}
                     inputChange={handleChange}
+                    inputValue={userData.telephone}
                     />
                     <br></br>
+                    <br></br>
+                    <Input
+                    inputType={'text'}
+                    inputName={'id_number'}
+                    inputPlaceholder={'ID Number'}
+                    inputStyle={commonStyle}
+                    inputValue={userData.id_number}
+                    inputChange={handleChange}/>
+                    <br></br>
+                    <br></br>
+                    <input type={'radio'} name={'gender'} value={'male'} id={'male'} onChange={handleChange}></input>                    
+                    <label htmlFor={'male'}> Male</label>
+                    <input type={'radio'} className={'ml-2'} name={'gender'} value={'female'} id={'female'} onChange={handleChange}></input>
+                    <label htmlFor={'female'}> Female</label>
                     <br></br>
                 </fieldset>
 
@@ -180,6 +201,7 @@ function ServiceProviderSignUp(){
                     inputPlaceholder={'example@gmail.com'}
                     inputStyle={commonStyle}
                     inputChange={handleChange}
+                    inputValue={userData.email}
                     />
                     <br></br>
                     <br></br>
@@ -192,6 +214,7 @@ function ServiceProviderSignUp(){
                     onKeyUp={trackPassValidity}
                     inputStyle={commonStyle}
                     inputChange={handleChange}
+                    inputValue={userData.password}
                     />
                     <br></br>
                     <br></br>

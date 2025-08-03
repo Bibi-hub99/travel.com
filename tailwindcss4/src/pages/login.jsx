@@ -5,7 +5,7 @@ import Input from "../components/input"
 import Button from "../components/button"
 import {useNavigate,Link,Navigate} from "react-router-dom"
 import {useState,useEffect} from "react"
-import {accountLogin} from "../crud/users"
+import {accountLogin,findAccountType} from "../crud/users"
 import {useMyContext} from "../context/context"
 import moment from "moment"
 
@@ -18,7 +18,8 @@ function LoginPage(){
         password:''
     })
 
-    const [value,jwtToken,setJwtToken,expIn,setExpIn] = useMyContext()
+    const [value,jwtToken,setJwtToken,expIn,setExpIn,accountType,setAccountType] = useMyContext()
+    console.log(accountType)
 
     const goBack = ()=>{
         navigate(-1)
@@ -44,19 +45,28 @@ function LoginPage(){
             const {email,password} = credentials
             const {data} = await accountLogin({email,password})
 
+
             const expIn = data.payload.expIn
             const bearerToken = data.payload.token
             const tokenValidity = moment().add(expIn, 'days')
             
-            const token = bearerToken
             const expireIn = tokenValidity.valueOf()
 
-            setJwtToken(token)
+            setJwtToken(bearerToken)
+            setAccountType(data.accountType)
             localStorage.setItem("expireIn",JSON.stringify(expireIn))
             setTimeout(()=>{
-                navigate('..')
+                
+                const navigateUser =()=> {
+                    if(data.accountType === 'client'){
+                        navigate('..')
+                    }else if(data.accountType === 'service_provider'){
+                        navigate('../service-provider',{relative:"path"})
+                    }
+                }
+                navigateUser()
+
             },3000)
-        
             
         }catch(err){
             console.log(err)
@@ -65,6 +75,7 @@ function LoginPage(){
 
     useEffect(()=>{
         localStorage.setItem("jwtToken",JSON.stringify(jwtToken))
+        localStorage.setItem("accountType",JSON.stringify(accountType))
     },[jwtToken])
 
     return (

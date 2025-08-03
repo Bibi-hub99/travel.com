@@ -21,7 +21,13 @@ const ServiceInfoPage = lazy(()=>import("../pages/service-informationPage"))
 const SearchPage = lazy(()=>import("../pages/search-page"))
 const LoginPage = lazy(()=>import("../pages/login"))
 const SignUpPage = lazy(()=>import("../pages/sign-up"))
-const BookService = lazy(()=>import("../pages/booking-service"))
+const ProviderHomePage = lazy(()=>import("../provider-pages/homepage"))
+const ProfilePage = lazy(()=>import("../provider-pages/profile"))
+//const BookService = lazy(()=>import("../pages/booking-service"))
+const MyServices = lazy(()=>import("../provider-pages/my-services"))
+const AddService = lazy(()=>import("../provider-pages/add-service"))
+
+const ProviderLayout = lazy(()=>import("../layout/provider-layout"))
 
 const routerPages = createBrowserRouter([
     {
@@ -148,7 +154,50 @@ const routerPages = createBrowserRouter([
                 <BookingService/>
             </Suspense>
         )
+    },
+    {
+        path:'service-provider',
+        element:(
+            <Suspense fallback={<Loading/>}>
+                <ProviderLayout/>
+            </Suspense>
+        ),
+        children:[
+            {
+                index:true,
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <ProviderHomePage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'profile',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <ProfilePage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'my-services',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <MyServices/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'my-services/add-service',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <AddService/>
+                    </Suspense>
+                )
+            }
+        ]
     }
+
 ])
 
 export default routerPages

@@ -16,15 +16,18 @@ const createUserAccount = async(req,res,next) => {
         }
         
         if(accountType === "service_provider"){
-            const {firstNames,surname,telephone} = req.body
+            const {firstNames,surname,telephone,gender,id_number} = req.body
             userAccount.firstNames = firstNames
             userAccount.surname = surname
             userAccount.telephone = telephone
+            userAccount.gender = gender
+            userAccount.id_number = id_number
         }
+
         
         const newUser = new userModel(userAccount)
         const savedUser = await newUser.save()
-        const response = await sendMail({
+        /*const response = await sendMail({
             from:process.env.GOOGLE_EMAIL_ACCOUNT,
             to:savedUser.email,
             subject:"Registration",
@@ -33,7 +36,7 @@ const createUserAccount = async(req,res,next) => {
                 <b>Your application for registration was successful you can now access your account</b>
             `
         })
-        console.log(response)
+        console.log(response)*/
         res.status(200).json({success:true})
 
     }catch(err){
@@ -58,7 +61,7 @@ const userLogin = async(req,res,next) => {
             const isValid = await comparePassHash(password,userAccount.passHash)
             if(isValid){
                 const payload = createPayload(userAccount)
-                return res.status(200).json({success:true,payload:payload})
+                return res.status(200).json({success:true,payload:payload,accountType:userAccount.accountType})
             }else{
                 next(new Error("incorrect login in credentials!"))
             }
@@ -70,4 +73,17 @@ const userLogin = async(req,res,next) => {
 
 }
 
-module.exports = {createUserAccount,userLogin}
+const findAccountType = async(req,res,next) => {
+    try{
+        res.status(200).json({success:true,accountType:req.user.accountType})
+    }catch(err){
+        next(err)
+    }
+}
+
+const getProfileInformation = async (req,res,next) => {
+    console.log(req.user)
+    res.status(200).json({success:true,profileInformation:req.user})
+}
+
+module.exports = {createUserAccount,userLogin,findAccountType,getProfileInformation}

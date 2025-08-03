@@ -15,6 +15,12 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { FaPlaneArrival } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import { VscDashboard } from "react-icons/vsc";
+import { SlUser } from "react-icons/sl";
+import { IoBuildOutline } from "react-icons/io5";
+import { CiLogout } from "react-icons/ci";
+import { GoBriefcase } from "react-icons/go";
+import { MdOutlineTravelExplore } from "react-icons/md";
 
 
 
@@ -100,20 +106,41 @@ function Context({children}){
         },
         {
             icon:<FaEye className={'inline'}/>
+        },
+        {
+            icon:<VscDashboard className={'inline'}/>
+        },
+        {
+            icon:<SlUser className={'inline'}/>
+        },
+        {
+            icon:<IoBuildOutline className={'inline'}/>
+        },
+        {
+            icon:<GoBriefcase className={'inline'}/>
+
+        },
+        {
+            icon:<CiLogout className={'inline'}/>
+        },
+        {
+            icon:<MdOutlineTravelExplore className={'inline text-[1.2rem]'}/>
         }
     ]
     })
 
-    const [jwtToken,setJwtToken] = useState(JSON.parse(localStorage.getItem("jwtToken")))
-    const [expIn,setExpIn] = useState(JSON.parse(localStorage.getItem("expireIn")))
+    const [jwtToken,setJwtToken] = useState(JSON.parse(localStorage.getItem("jwtToken")) || null)
+    const [expIn,setExpIn] = useState(JSON.parse(localStorage.getItem("expireIn") || null))
+    const [accountType,setAccountType] = useState(JSON.parse(localStorage.getItem('account_type')) || null)
+
 
     //shared state amongst all components and pages of the application
     //made it an object to avoid repeating some parts of code especially navlinks and icon importing
 
     return (
-        <MyContext.Provider value={[value,jwtToken,setJwtToken,expIn,setExpIn]}>
+        <MyContext.Provider value={[value,jwtToken,setJwtToken,expIn,setExpIn,accountType,setAccountType]}>
             {children}
-        </MyContext.Provider>
+        </MyContext.Provider>   
     )
 }
 

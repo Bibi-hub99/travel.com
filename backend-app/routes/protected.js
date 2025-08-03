@@ -2,18 +2,19 @@
 const passport = require("passport")
 const serviceModel = require("../models/services")
 const {makeBooking} = require("../crud/bookings")
+const {findAccountType,getProfileInformation} = require("../crud/users")
+const {isClient,isServiceProvider} = require("../utils/authorization")
 
 const express = require("express")
 
 const ProtectedRouter = express.Router()
 
-ProtectedRouter.get("/booking/service/:serviceID",passport.authenticate("jwt",{session:false,failureRedirect:"../../../not-authenticated"}),async(req,res)=>{
+const notAuth1 = '../../../not-authenticated'
+
+ProtectedRouter.get("/booking/service/:serviceID",passport.authenticate("jwt",{session:false,failureRedirect:notAuth1}),isClient,async(req,res)=>{
     try{
 
         const {serviceID} = req.params
-        const {jwtToken} = req.body
-        console.log(jwtToken)
-        console.log(req.user)
 
         const service = await serviceModel.findById(serviceID)
         res.status(200).json({success:true,service:service})
@@ -23,6 +24,10 @@ ProtectedRouter.get("/booking/service/:serviceID",passport.authenticate("jwt",{s
     }
 })
 
-ProtectedRouter.put("/booking/service/:serviceID",passport.authenticate("jwt",{session:false,failureRedirect:'../../../not-authenticated'}),makeBooking)
+ProtectedRouter.get('/accounts/account/accountType',passport.authenticate('jwt',{session:false,failureRedirect:notAuth1}),findAccountType)
+
+ProtectedRouter.get('/accounts/account/profile-information',passport.authenticate("jwt",{session:false,failureRedirect:notAuth1}),isServiceProvider,getProfileInformation)
+
+ProtectedRouter.put("/booking/service/:serviceID",passport.authenticate("jwt",{session:false,failureRedirect:notAuth1}),makeBooking)
 
 module.exports = ProtectedRouter
