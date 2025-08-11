@@ -26,8 +26,8 @@ const ProfilePage = lazy(()=>import("../provider-pages/profile"))
 //const BookService = lazy(()=>import("../pages/booking-service"))
 const MyServices = lazy(()=>import("../provider-pages/my-services"))
 const AddService = lazy(()=>import("../provider-pages/add-service"))
-
 const ProviderLayout = lazy(()=>import("../layout/provider-layout"))
+const ViewServices =lazy(()=>import("../provider-pages/view-services"))
 
 const routerPages = createBrowserRouter([
     {
@@ -192,6 +192,14 @@ const routerPages = createBrowserRouter([
                 element:(
                     <Suspense fallback={<Loading/>}>
                         <AddService/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'my-services/view',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <ViewServices/>
                     </Suspense>
                 )
             }

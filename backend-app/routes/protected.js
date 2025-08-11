@@ -4,6 +4,7 @@ const serviceModel = require("../models/services")
 const {makeBooking} = require("../crud/bookings")
 const {findAccountType,getProfileInformation} = require("../crud/users")
 const {isClient,isServiceProvider} = require("../utils/authorization")
+const {addService,getProviderServices} = require("../crud/services")
 
 const express = require("express")
 
@@ -29,5 +30,8 @@ ProtectedRouter.get('/accounts/account/accountType',passport.authenticate('jwt',
 ProtectedRouter.get('/accounts/account/profile-information',passport.authenticate("jwt",{session:false,failureRedirect:notAuth1}),isServiceProvider,getProfileInformation)
 
 ProtectedRouter.put("/booking/service/:serviceID",passport.authenticate("jwt",{session:false,failureRedirect:notAuth1}),makeBooking)
+
+ProtectedRouter.get("/services/provider-services",passport.authenticate("jwt",{session:false,failureRedirect:"../../../not-authenticated"}),getProviderServices)
+ProtectedRouter.post("/services/add-service",passport.authenticate("jwt",{session:false,failureRedirect:'../../../not-authenticated'}),addService)
 
 module.exports = ProtectedRouter

@@ -130,7 +130,7 @@ function Context({children}){
     })
 
     const [jwtToken,setJwtToken] = useState(JSON.parse(localStorage.getItem("jwtToken")) || null)
-    const [expIn,setExpIn] = useState(JSON.parse(localStorage.getItem("expireIn") || null))
+    const [expIn,setExpIn] = useState(JSON.parse(localStorage.getItem("expIn") || null))
     const [accountType,setAccountType] = useState(JSON.parse(localStorage.getItem('account_type')) || null)
 
 

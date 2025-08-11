@@ -42,7 +42,7 @@ function BookingService(){
 
     if(!isLoggedIn(expIn)){
         return (
-            <Navigate to={'..'}/>
+            <Navigate to={'../login'}/>
         )
     }
 

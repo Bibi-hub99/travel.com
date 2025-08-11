@@ -52,13 +52,14 @@ const userLogin = async(req,res,next) => {
 
         const {email,password} = req.body
         const userAccount = await userModel.findOne({email:email})
+
         
         if(!userAccount){
             //call error if no account matches
             next(new Error("account not found, wrong credentials!"))
         }else{
             //handling hash comparing logic
-            const isValid = await comparePassHash(password,userAccount.passHash)
+            const isValid = await comparePassHash(password,userAccount.passHash)            
             if(isValid){
                 const payload = createPayload(userAccount)
                 return res.status(200).json({success:true,payload:payload,accountType:userAccount.accountType})

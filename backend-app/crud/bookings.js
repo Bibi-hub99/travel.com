@@ -18,12 +18,13 @@ const makeBooking = async (req,res,next) => {
         const bookingObj = {
             //userID:req.user_id,
         }
-        console.log(String(req.user._id))
+
+        const userID = String(req.user._id)
 
         if(serviceToBook.category === "stays" || serviceToBook.category === "activities"){
             bookingObj.$push = {
                 bookings_information:{
-                    userID:String(req.user._id),
+                    userID:userID,
                     uniqueFeatures:{
                         checkIn:'2025-07-01',
                         checkOut:'2025-10-20'
@@ -33,19 +34,21 @@ const makeBooking = async (req,res,next) => {
         }
 
         if(serviceToBook.category === "buses" || serviceToBook.category === "flights"){
-            bookingObj.$push = {
-                bookings_information:{
-                    userID:String(req.user_id)
-                }
-            }
-        }
 
-        console.log(bookingObj)
-        console.log(serviceID)
+            bookingObj.$push = {
+
+                bookings_information:{
+                    userID:userID
+                }
+
+            }
+
+        }
 
         await bookingModel.updateOne({serviceID:serviceID},bookingObj,{upsert:true})
 
         const response = await sendMail({
+
             from:process.env.GOOGL_EMAIL_ACCOUNT,
             to:`${req.user.email}`,
             subject:"Booking Confirmation",
@@ -57,6 +60,7 @@ const makeBooking = async (req,res,next) => {
             <br></br>s
 
             `
+            
         })
         //console.log(response)
         res.status(200).json({success:true})

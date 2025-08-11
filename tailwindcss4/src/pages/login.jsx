@@ -19,8 +19,7 @@ function LoginPage(){
     })
 
     const [value,jwtToken,setJwtToken,expIn,setExpIn,accountType,setAccountType] = useMyContext()
-    console.log(accountType)
-
+    
     const goBack = ()=>{
         navigate(-1)
     }
@@ -54,7 +53,7 @@ function LoginPage(){
 
             setJwtToken(bearerToken)
             setAccountType(data.accountType)
-            localStorage.setItem("expireIn",JSON.stringify(expireIn))
+            setExpIn(expireIn)
             setTimeout(()=>{
                 
                 const navigateUser =()=> {
@@ -69,13 +68,14 @@ function LoginPage(){
             },3000)
             
         }catch(err){
-            console.log(err)
+            console.log(err.status)
         }
     }
 
     useEffect(()=>{
         localStorage.setItem("jwtToken",JSON.stringify(jwtToken))
         localStorage.setItem("accountType",JSON.stringify(accountType))
+        localStorage.setItem("expIn",JSON.stringify(expIn))
     },[jwtToken])
 
     return (
