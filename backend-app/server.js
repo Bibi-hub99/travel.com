@@ -17,8 +17,8 @@ app.use(cors())
 
 ConnectDB()
 
-app.use(passport.initialize())
 require("./utils/passport")(passport)
+app.use(passport.initialize())
 
 app.use('/offers',OfferRouter)
 app.use("/locations",LocationRouter)

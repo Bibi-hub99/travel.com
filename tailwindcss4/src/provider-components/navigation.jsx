@@ -11,7 +11,7 @@ function ProviderNav(){
     const btnStyle = 'text-[1.5rem] cursor-pointer'
 
     return (
-        <div className={`py-2 bg-blue-500 text-white rounded-bl-xl rounded-br-xl`}>
+        <div className={`py-2 bg-blue-500 text-white rounded-bl-xl rounded-br-xl`} style={{width:'100%',position:'fixed',top:'0',zIndex:'30'}}>
 
             <div className={`${value.containerStyle} flex justify-between items-center`}>
 

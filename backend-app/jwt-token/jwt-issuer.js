@@ -1,5 +1,6 @@
 //handles token generation for the user dynamically
 const jsonwebtoken = require("jsonwebtoken")
+
 const path = require("path")
 const fs = require('fs')
 //create a payload for the user login
@@ -11,15 +12,14 @@ const createPayload = (user)=>{
 
     const {_id,accountType} = user
 
-    const expireIn = 1
+    const expireIn = 5
 
     const payload = {
         sub:_id,
-        iat:Date.now(),
-        accType:accountType
+        iat:Date.now()
     }
 
-    const token = jsonwebtoken.sign(payload,privateKey,{algorithm:"RS256",expiresIn:'1d'})
+    const token = jsonwebtoken.sign(payload,privateKey,{expiresIn:'1d',algorithm:"RS256"})
     return {
         token:`Bearer ${token}`,
         expIn:expireIn

@@ -40,11 +40,11 @@ function BookingService(){
 
     },[serviceID])
 
-    if(!isLoggedIn(expIn)){
+    /*if(!isLoggedIn(expIn)){
         return (
-            <Navigate to={'..'}/>
+            <Navigate to={'../login'}/>
         )
-    }
+    }*/
 
     const makeABooking = async (serviceID,token) => {
         try{

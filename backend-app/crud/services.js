@@ -111,4 +111,167 @@ const queryServices = async(req,res,next) => {
     }
 }
 
-module.exports = {findServices,findByCategory,searchServices,findSingleService,queryServices}
+const addService = async (req,res,next) => {
+    try{
+        const {_id} = req.user
+        const {title,price,imageURL,category,description} = req.body
+        const providerID = String(_id)
+        let serviceObj = {
+    
+            title,
+            description,
+            price,
+            imageURL,
+            category,
+            providerID
+        }
+
+        if(category === "stays" || category === "activities"){
+            const {location} = req.body
+            const locationSplits = location.split(",")
+            serviceObj['location'] = {
+                country:locationSplits[0],
+                city:locationSplits[1],
+                streetName:locationSplits[2],
+                postCode:locationSplits[3]
+            }
+        }else if(category === "flights" || category === "buses"){
+            const {departAddress,departTime,arrivalAddress,arrivalTime} = req.body
+            const departSplits = departAddress.split(",")
+            const arrivalSplits = arrivalAddress.split(",")
+
+            let dTime = new Date(departTime)
+            let aTime = new Date(arrivalTime)
+            const departHours = dTime.getHours() + ':' + dTime.getMinutes()
+            const arrivalHours = aTime.getHours() + ':' + aTime.getMinutes()
+            //service
+            serviceObj = {
+                ...serviceObj,
+                location:{
+                    country:departSplits[0],
+                    city:departSplits[1]
+                },
+                uniqueFeatures:{
+                    tripFromAddress:{
+                        streetName:departSplits[2],
+                        postCode:departSplits[3],
+                        time:departHours
+                    },
+                    tripToAddress:{
+                        country:arrivalSplits[0],
+                        city:arrivalSplits[1],
+                        streetName:arrivalSplits[2],
+                        postCode:arrivalSplits[3],
+                        time:arrivalHours
+                    }
+                }
+            }
+        }
+        
+        const newService = new serviceModel(serviceObj)
+        await newService.save()
+
+        const services = await serviceModel.find({providerID:providerID},{providerID:0})
+
+        res.status(200).json({success:true,services:services})
+
+    }catch(err){
+        console.log(err)
+        next(err)
+    }
+}
+
+const getProviderServices = async (req,res,next) => {
+    try{
+        const {_id} = req.user
+        const providerID = String(_id)
+        const services = await serviceModel.find({providerID:providerID},{providerID:0})
+        res.status(200).json({success:true,services:services})
+    }catch(err){
+        console.log(err)
+    }
+}
+
+const updateService = async (req,res,next) => {
+    try{
+
+        const {title,price,imageURL,category,description} = req.body
+        const {serviceID} = req.params
+        const {_id} = req.user
+        const providerID = String(_id)
+        let updateObj = {title,price,imageURL,description}
+        
+        if(category === "stays" || category === "activities"){
+            const {location} = req.body
+            const locationSplits = location.split(",")
+            updateObj['location'] = {
+                country:locationSplits[0],
+                city:locationSplits[1],
+                streetName:locationSplits[2],
+                postCode:locationSplits[3]
+            }
+        }else if(category === "flights" || category === "buses"){
+            const {departAddress,departTime,arrivalAddress,arrivalTime} = req.body
+            const departSplits = departAddress.split(",")
+            const arrivalSplits = arrivalAddress.split(",")
+
+            let dTime = new Date(departTime)
+            let aTime = new Date(arrivalTime)
+            const departHours = dTime.getHours() + ':' + dTime.getMinutes()
+            const arrivalHours = aTime.getHours() + ':' + aTime.getMinutes()
+            //service
+            updateObj = {
+                ...updateObj,
+                location:{
+                    country:departSplits[0],
+                    city:departSplits[1]
+                },
+                uniqueFeatures:{
+                    tripFromAddress:{
+                        streetName:departSplits[2],
+                        postCode:departSplits[3],
+                        time:departHours
+                    },
+                    tripToAddress:{
+                        country:arrivalSplits[0],
+                        city:arrivalSplits[1],
+                        streetName:arrivalSplits[2],
+                        postCode:arrivalSplits[3],
+                        time:arrivalHours
+                    }
+                }
+            }
+        }
+        await serviceModel.findByIdAndUpdate(serviceID,{$set:updateObj})
+        const services = await serviceModel.find({providerID:providerID})
+        res.status(200).json({success:true,services:services},{providerID:0})
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
+const deleteService = async (req,res,next) => {
+    try{
+        const {serviceID} = req.params
+        const {_id} = req.user
+        const providerID = String(_id)
+        await serviceModel.findByIdAndDelete(serviceID)
+        const services = await serviceModel.find({providerID:providerID},{providerID:0})
+        res.status(200).json({success:true,services:services})
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports = {
+    findServices,
+    findByCategory,
+    searchServices,
+    findSingleService,
+    queryServices,
+    addService,
+    updateService,
+    getProviderServices,
+    deleteService
+}

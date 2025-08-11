@@ -1,4 +1,5 @@
 //handles jwt verification and authentication of the user
+const moment = require("moment")
 
 const userModel = require("../models/users")
 const jwtStrategy = require("passport-jwt").Strategy
@@ -23,6 +24,8 @@ const verifyCallback = async(payload,done) => {
 
     try{
         const user = await userModel.findById(payload.sub)
+        console.log(moment())
+        console.log(moment(payload.exp))
         if(user){
             return done(null,user)
         }else{
