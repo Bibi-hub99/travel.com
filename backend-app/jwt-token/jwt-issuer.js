@@ -12,11 +12,12 @@ const createPayload = (user)=>{
 
     const {_id,accountType} = user
 
-    const expireIn = 5
+    const expireIn = 1
 
     const payload = {
         sub:_id,
-        iat:Date.now()
+        iat:Math.floor(Date.now() / 1000),
+        accountType:accountType
     }
 
     const token = jsonwebtoken.sign(payload,privateKey,{expiresIn:'1d',algorithm:"RS256"})

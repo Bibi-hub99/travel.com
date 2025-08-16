@@ -27,6 +27,7 @@ function ProfileCard(props){
             <div className={'bg-white shadow-gray-500 shadow-lg rounded-xl col-start-1 col-end-2 text-center md:text-left p-2'}>
                 <div className={'rounded-xl'}>
                     <Button
+                    handleClick={props.handleUpdateForm}
                     btnStyle={'text-[1.7rem] w-full text-center cursor-pointer hover:bg-blue-500 hover:text-white rounded-xl'}
                     btnInnerText={<GrEdit className={'inline'}/>}
                     />

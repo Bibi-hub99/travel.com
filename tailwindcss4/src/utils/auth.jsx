@@ -8,7 +8,7 @@ export const isLoggedIn = (expIn) => {
 
     const expireInMoment = moment(expIn)
     const isExpired = moment().isBefore(expireInMoment)    
-    console.log(expireInMoment)
+    console.log(expIn)
     return isExpired
 
 }
