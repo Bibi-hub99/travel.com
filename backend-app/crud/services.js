@@ -57,7 +57,8 @@ const findSingleService = async(req,res,next)=>{
 
         const {serviceID} = req.params
         const service = await serviceModel.findSingleService(serviceID)
-        res.status(200).json({success:true,service:service})
+        const similar = await service.findSimilar()
+        res.status(200).json({success:true,service:service,similarServices:similar})
 
     }catch(err){
         console.log(err)

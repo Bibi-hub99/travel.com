@@ -34,6 +34,11 @@ serviceSchema.statics.findSingleService = async function findSingleService(id){
     return service
 }
 
+serviceSchema.methods.findSimilar = async function findSimilar(){
+    const services = await mongoose.model("services").find({$and:[{category:this.category},{_id:{$ne:this._id}}]})
+    return services
+}
+
 const serviceModel = mongoose.model("services",serviceSchema,"services")
 
 module.exports = serviceModel
