@@ -27,6 +27,7 @@ function SingleServicePage(props){
                 const {data} = await findSingleService(serviceID)
                 console.log(data)
                 setSingleService(data.service)
+                setSimilarServices(data.similarServices)
             }catch(err){
                 console.log(err)
             }
