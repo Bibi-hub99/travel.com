@@ -45,24 +45,7 @@ const makeBooking = async (req,res,next) => {
 
         }
 
-        await bookingModel.updateOne({serviceID:serviceID},bookingObj,{upsert:true})
-
-        const response = await sendMail({
-
-            from:process.env.GOOGL_EMAIL_ACCOUNT,
-            to:`${req.user.email}`,
-            subject:"Booking Confirmation",
-            html:
-            `<p style={'font-weight:bolder'}>
-                Your booking for service ${serviceToBook._id} was made successful for more information
-                email us or contact 083 353 7975
-            </p>
-            <br></br>s
-
-            `
-            
-        })
-        //console.log(response)
+     
         res.status(200).json({success:true})
 
     }catch(err){

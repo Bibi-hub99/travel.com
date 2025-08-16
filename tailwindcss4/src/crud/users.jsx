@@ -26,3 +26,9 @@ export const getProfileInformation = async(jwtToken) => {
     const response = await axios.get(`${baseURL}/protected/accounts/account/profile-information`,{headers:{Authorization:jwtToken}})
     return response
 }
+
+export const updateInformation = async ({jwtToken,...updateObj}) => {
+    console.log(updateObj)
+    const response = await axios.put(`${baseURL}/protected/accounts/account/update-information`,{...updateObj},{headers:{Authorization:jwtToken}})
+    return response
+}

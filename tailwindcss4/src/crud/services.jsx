@@ -24,3 +24,15 @@ export const deleteService = async ({serviceID,jwtToken}) => {
     const response = await axios.delete(`${baseURL}/protected/services/delete-service/${serviceID}`,{headers:{Authorization:jwtToken}})
     return response
 }
+
+export const addComment = async ({serviceID,comment,jwtToken}) => {
+    const response = await axios.put(`${baseURL}/protected/services/add-comment/${serviceID}`,{comment},{headers:{Authorization:jwtToken}})
+    return response
+}
+
+export const getProductData = async ({serviceID,jwtToken}) => {
+    const response = await axios.get(`${baseURL}/protected/services/get-comments/${serviceID}`,{headers:{Authorization:jwtToken}})
+    return response
+}
+
+

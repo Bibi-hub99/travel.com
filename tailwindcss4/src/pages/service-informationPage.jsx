@@ -5,7 +5,7 @@ import {useOutletContext} from "react-router-dom"
 
 function ServiceInformationPage(){
 
-    const [singleService,setSingleService] = useOutletContext()
+    const [singleService,setSingleService,similarService] = useOutletContext()
     const [value] = useMyContext()
 
     const {category} = singleService

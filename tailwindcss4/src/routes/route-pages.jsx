@@ -27,7 +27,9 @@ const ProfilePage = lazy(()=>import("../provider-pages/profile"))
 const MyServices = lazy(()=>import("../provider-pages/my-services"))
 const AddService = lazy(()=>import("../provider-pages/add-service"))
 const ProviderLayout = lazy(()=>import("../layout/provider-layout"))
-const ViewServices =lazy(()=>import("../provider-pages/view-services"))
+const ViewServices = lazy(()=>import("../provider-pages/view-services"))
+const CommentsPage = lazy(()=>import("../pages/comments-page"))
+const SimilarPage = lazy(()=>import("../pages/similar-page"))
 
 const routerPages = createBrowserRouter([
     {
@@ -100,6 +102,22 @@ const routerPages = createBrowserRouter([
                 element:(
                     <Suspense fallback={<Loading/>}>
                         <ServiceInfoPage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'comments',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <CommentsPage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'similar-items',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <SimilarPage isRelative={true}/>
                     </Suspense>
                 )
             }

@@ -1,7 +1,7 @@
 const userModel = require("../models/users")
 const {createPassHash,comparePassHash} = require("../utils/password-utils")
 const {createPayload} = require("../jwt-token/jwt-issuer")
-const {sendMail} = require("../utils/email")
+
 
 const createUserAccount = async(req,res,next) => {
 
@@ -27,16 +27,6 @@ const createUserAccount = async(req,res,next) => {
         
         const newUser = new userModel(userAccount)
         const savedUser = await newUser.save()
-        /*const response = await sendMail({
-            from:process.env.GOOGLE_EMAIL_ACCOUNT,
-            to:savedUser.email,
-            subject:"Registration",
-            html:
-            `
-                <b>Your application for registration was successful you can now access your account</b>
-            `
-        })
-        console.log(response)*/
         res.status(200).json({success:true})
 
     }catch(err){
@@ -83,8 +73,40 @@ const findAccountType = async(req,res,next) => {
 }
 
 const getProfileInformation = async (req,res,next) => {
-    console.log(req.user)
-    res.status(200).json({success:true,profileInformation:req.user})
+    const profileInformation = req.user
+    delete profileInformation._id
+    delete profileInformation.passHash
+    res.status(200).json({success:true,profileInformation:profileInformation})
 }
 
-module.exports = {createUserAccount,userLogin,findAccountType,getProfileInformation}
+const updateInformation = async (req,res,next) => {
+
+    try{
+
+        const {firstNames,surname,telephone,id_number,gender} = req.body
+        const updateObj = {
+            firstNames,
+            surname,
+            telephone,
+            id_number,
+            gender
+        }
+
+        const userID = String(req.user._id)
+        await userModel.updateOne({_id:userID},{$set:updateObj})
+        
+        const profileInformation = await userModel.findOne({_id:userID},{passHash:0,_id:0})
+        res.status(200).json({success:true,profileInformation:profileInformation})
+    }catch(err){
+        console.log(err)
+    }
+    
+}
+
+module.exports = {
+    createUserAccount,
+    userLogin,
+    findAccountType,
+    getProfileInformation,
+    updateInformation
+}

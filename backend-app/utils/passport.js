@@ -24,8 +24,6 @@ const verifyCallback = async(payload,done) => {
 
     try{
         const user = await userModel.findById(payload.sub)
-        console.log(moment())
-        console.log(moment(payload.exp))
         if(user){
             return done(null,user)
         }else{
