@@ -34,6 +34,7 @@ function SearchPage(){
     const midFilter = queryGetter("midFilter")
     const highFilter = queryGetter("highFilter")
     const maxFilter = queryGetter("maxFilter")
+    const sort = queryGetter("sort")
 
     //bundles query attributes into object query
     const queryObj = {
@@ -45,7 +46,8 @@ function SearchPage(){
         minFilter,
         midFilter,
         highFilter,
-        maxFilter
+        maxFilter,
+        sort
 
     }
 
@@ -71,7 +73,10 @@ function SearchPage(){
               [name]:checked
             })
         }else{
-            
+            setSearchQuery({
+                ...queryObj,
+                [name]:value
+            })   
         }
 
     }
@@ -126,21 +131,39 @@ function SearchPage(){
                     btnStyle={'text-[1.8rem] w-full text-center cursor-pointer'}/>
 
                     {/*filters and sorters */}
-                    <div className={'bg-white absolute text-left w-[250px] p-2 rounded-xl right-0  shadow-xl shadow-black'} style={{zIndex:'9'}}>
+                    <div className={'bg-white absolute text-left w-[250px] p-2 rounded-xl right-0 top-15 shadow-sm'} style={{zIndex:'9'}}>
                         <p>filter</p>
-                        <input type={'checkbox'} name={'minFilter'} onChange={handleCheck}></input>
-                        <label> R0 to R1000</label>
-                        <br></br>
-                        <input type={'checkbox'} name={'midFilter'} onChange={handleCheck}></input>
-                        <label> R1001 to R2000</label>
+
+                        <form>
+
+                            <input type={'checkbox'} name={'minFilter'} onChange={handleCheck}></input>
+                            <label> R0 to R1000</label><br></br>
+                            <input type={'checkbox'} name={'midFilter'} onChange={handleCheck}></input>
+                            <label> R1001 to R2000</label>
+                            <br></br>
+                            <p>sort</p>
+                            <input type={'radio'} name={'sort'} value={'by_name'} onChange={handleCheck}></input>
+                            <label> Sort By Name </label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_price_asc'} onChange={handleCheck}></input>
+                            <label> Sort By Price  (min to high) </label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_price_des'} onChange={handleCheck}></input>
+                            <label> Sort By Price (high to min) </label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_relevance'} onChange={handleCheck}></input>
+                            <label> Sort By Relevance </label><br></br>
+
+                        </form>
+
                     </div>
                 </div>
 
             </div>
 
-            <div className={'lg:flex justify-between items-start'}>
+            <div className={'lg:flex justify-evenly items-start'}>
 
-                <div className={'hidden lg:block w-[25%] h-[100vh] pt-5 bg-gray-200 rounded-xl px-2 box-border relative'}>
+                <div className={'hidden lg:block w-[20%] h-[100vh] pt-5 bg-gray-200 rounded-xl px-2 box-border fixed left-0'}>
 
                     <Input
                     inputType={'text'}
@@ -157,21 +180,42 @@ function SearchPage(){
 
                     <div className={''}>
                         <p>Filters</p>
-                        <input type={'checkbox'}></input>
-                        <label> 0 to R1000</label><br></br>
-                        <input type={'checkbox'}></input>
-                        <label> R1000 to R2000</label>
+
+                        <form>
+
+                            <input type={'checkbox'} name={'minFilter'} id='minFilter' onChange={handleCheck}></input>
+                            <label htmlFor={'minFilter'}> 0 to R1000</label><br></br>
+                            <input type={'checkbox'} name={'midFilter'} id="midFilter" onChange={handleCheck}></input>
+                            <label htmlFor={'midFilter'}> R1000 to R2000</label>
+                            <br></br>
+
+                            <p>sort</p>
+
+                            <input type={'radio'} name={'sort'} value={'by_name'} onChange={handleCheck}></input>
+                            <label> Sort By Name</label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_price_asc'} onChange={handleCheck}></input>
+                            <label> Sort By Price (min - high) </label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_price_des'} onChange={handleCheck}></input>
+                            <label> Sort By Price (high - min) </label><br></br>
+
+                            <input type={'radio'} name={'sort'} value={'by_relevance'} onChange={handleCheck}></input>
+                            <label> Sort By Relevance </label>
+
+                        </form>
+
                     </div>
 
                 </div>
 
-                <div className={'lg:w-[73%] lg:pt-5 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4'}>
+                <div className={'lg:w-[80%] lg:ml-[20%] lg:pt-5 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4 lg:px-2'}>
                     {
                         servicesOffered.length > 0 ? servicesOffered.map((each)=>{
 
                             const imageContainerStyle = 'h-[300px] md:h-[200px] relative'
 
-                            const cardStyle = 'bg-white shadow-gray-400 shadow-xl/30 p-2 box-border p-4 rounded-xl'
+                            const cardStyle = 'bg-white shadow-gray-400 shadow-sm p-2 box-border p-4 rounded-xl'
 
                             return each.category !== "flights" && each.category !== "buses" ?
                             <ServiceStayCard

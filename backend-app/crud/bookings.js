@@ -45,7 +45,7 @@ const makeBooking = async (req,res,next) => {
 
         }
 
-     
+        await bookingModel.updateOne({serviceID:serviceID},bookingObj,{upsert:true})     
         res.status(200).json({success:true})
 
     }catch(err){
