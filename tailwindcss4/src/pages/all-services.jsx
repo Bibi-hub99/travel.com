@@ -16,7 +16,7 @@ function AllServicesPage(){
     const handlePage = async(skip,index) => {
 
         try{
-            
+            console.log(skip + ' skip')
             const {data} = await paginateServices({skip:skip,limit:2})
             setServicesOffered(data.services)
         }catch(err){

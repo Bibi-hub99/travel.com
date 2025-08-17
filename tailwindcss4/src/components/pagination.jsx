@@ -38,7 +38,10 @@ function Pagination(props){
     //function handles pagination logic and calls after the one on the parent component
     const checkFn = (skip,elemNum)=>{
 
+
         props.handleClick(skip,elemNum).then(()=>{
+
+            console.log(elemNum + ' elemNum')
 
 
             setPages((oldValue)=>{
@@ -50,7 +53,7 @@ function Pagination(props){
                 let x = [...oldValue]
     
                 if(clickElementIndex === findLength - 1){
-                    x = [...oldValue.slice(1),{number:lastElement.number + 1,isOpened:false,skip:lastElement.skip + 10}]
+                    x = [...oldValue.slice(1),{number:lastElement.number + 1,isOpened:false,skip:lastElement.skip + 2}]
                 }
                 
                 if(clickElementIndex === 0){
@@ -62,7 +65,7 @@ function Pagination(props){
                     if(firstElement.number !== 1){
 
                         x = [...oldValue.slice(0,3)]
-                        x.unshift({number:firstElement.number - 1,isOpened:false,skip:firstElement.skip - 10})
+                        x.unshift({number:firstElement.number - 1,isOpened:false,skip:firstElement.skip - 2})
 
                     }
                     
@@ -96,6 +99,9 @@ function Pagination(props){
                 //returning just the first element without any logic delibately
             })
 
+            console.log(firstElem)
+            console.log(findElem)
+
             const lastElemIndex = x.findIndex((each)=>{
                 return each.isOpened
             })
@@ -109,16 +115,17 @@ function Pagination(props){
             }else{
                 nextElem = findElem.number - 1
             }
-
             console.log(nextElem)
 
             if(nextElem > 0){
 
                 
-                if(lastElemIndex + 1 === findLength){
-                    x = [...x.slice(2),{number:findElem.number + 1,isOpened:true,skip:findElem.skip + 2}]
-                }else if(lastElemIndex < findLength && lastElemIndex ){
-                    x = [{number:findElem.number -  1,isOpened:true,skip:findElem.skip - 2},...x.slice(0,3)]
+                if(lastElemIndex + 1 === findLength && direction === "forward"){
+                    console.log('add')
+                    x = [...x.slice(1),{number:findElem.number + 1,isOpened:true,skip:findElem.skip + 2}]
+                }else if(firstElem.number > 1  && direction === "back"){
+                    console.log('remove')
+                    x = [{number:firstElem.number -  1,isOpened:true,skip:firstElem.skip - 2},...x.slice(0,3)]
                 }
                 
                 return x.map((each) => {
@@ -135,6 +142,7 @@ function Pagination(props){
     }
 
     console.log(pages)
+
 
     return (
         <div className={`${props.style}`}>
