@@ -5,7 +5,8 @@ const serviceModel = require("../models/services")
 
 const findServices = async(req,res,next) => {
     try{
-        const services = await serviceModel.find({})
+        const services = await serviceModel.find({}).skip(req.query.skip).limit(req.query.limit)
+        console.log(req.query)
         res.status(200).json({success:true,services:services})
     }catch(err){
         next(err)   

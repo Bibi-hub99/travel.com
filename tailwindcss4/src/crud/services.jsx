@@ -10,8 +10,8 @@ export const addService = async({jwtToken,...serviceObj}) =>{
     
 }
 
-export const getServices = async (jwtToken)=>{
-    const response = await axios.get(`${baseURL}/protected/services/provider-services`,{headers:{Authorization:jwtToken}})
+export const getServices = async (jwtToken,skip,limit)=>{
+    const response = await axios.get(`${baseURL}/protected/services/provider-services?skip=${skip}&limit=${limit}`,{headers:{Authorization:jwtToken}})
     return response
 }
 
@@ -34,5 +34,3 @@ export const getProductData = async ({serviceID,jwtToken}) => {
     const response = await axios.get(`${baseURL}/protected/services/get-comments/${serviceID}`,{headers:{Authorization:jwtToken}})
     return response
 }
-
-

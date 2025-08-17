@@ -7,8 +7,13 @@ const baseURL = import.meta.env.VITE_BASE_URL
 const jwtToken = JSON.parse(localStorage.getItem("jwtToken"))
 
 export const findServices = async()=>{
-    const services = axios.get(`${baseURL}/services`)
+    const services = axios.get(`${baseURL}/services?skip=${0}&limit=${2}`)
     return defer({services:services})
+}
+
+export const paginateServices = async ({skip,limit}) => {
+    const services = axios.get(`${baseURL}/services?skip=${skip}&limit=${limit}`)
+    return services
 }
 
 export const findByCategory = async(category)=>{
