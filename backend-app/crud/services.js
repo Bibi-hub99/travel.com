@@ -69,7 +69,7 @@ const findSingleService = async(req,res,next)=>{
 
 const queryServices = async(req,res,next) => {
     try{
-
+        console.log(req.query.sort)
         const queryObj = {}
         queryObj.$text = {$search: `\"${req.query.searchTerm}\"`}
         const filterArr = []
@@ -94,16 +94,25 @@ const queryServices = async(req,res,next) => {
             filterArr.push({price:{$gte:2001,$lte:3000}})
         }
 
-        if(req.query.category === "true"){
-            filterArr.push({price:{$gte:3001}})
-        }
-
         const refactor = {
             $or:filterArr
         }
 
-        const services = await queryDB.find(refactor)
+        let queryFinal = queryDB.find(refactor)
 
+        if(req.query.sort !== undefined && req.query.sort !== "undefined" && req.query.sort !== null && req.query.sort !== "null"){
+            const sort = req.query.sort
+            if(sort === "by_name"){
+                queryFinal = queryFinal.find({}).sort({title:1})
+            }else if (sort === 'by_price_asc'){
+                queryFinal = queryFinal.find({}).sort({price:1})
+            }else if (sort === 'by_price_des'){
+                queryFinal = queryFinal.find({}).sort({price:-1})
+            }
+        }
+
+        const services = await queryFinal.find({})
+        
         res.status(200).json({success:true,services:services})
 
     }catch(err){

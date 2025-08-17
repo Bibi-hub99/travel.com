@@ -2,9 +2,9 @@
 import axios from "axios"
 const baseURL = import.meta.env.VITE_BASE_URL
 
-export const queryService = async({searchTerm,skip,limit,category,minFilter,midFilter,highFilter,maxFilter}) => {
+export const queryService = async({searchTerm,skip,limit,category,minFilter,midFilter,highFilter,maxFilter,sort}) => {
   
-    const services = axios.get(`${baseURL}/services/search-all?searchTerm=${searchTerm}&skip=${skip}&limit=${limit}&category=${category}&minFilter=${minFilter}&midFilter=${midFilter}&highFilter=${highFilter}&maxFilter=${maxFilter}`)
+    const services = axios.get(`${baseURL}/services/search-all?searchTerm=${searchTerm}&skip=${skip}&limit=${limit}&category=${category}&minFilter=${minFilter}&midFilter=${midFilter}&highFilter=${highFilter}&maxFilter=${maxFilter}&sort=${sort}`)
     return services
 }
 

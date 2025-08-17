@@ -27,6 +27,7 @@ function SingleServicePage(props){
                 const {data} = await findSingleService(serviceID)
                 console.log(data)
                 setSingleService(data.service)
+                setSimilarServices(data.similarServices)
             }catch(err){
                 console.log(err)
             }
@@ -34,7 +35,7 @@ function SingleServicePage(props){
 
         findService(serviceID)
 
-    },[])
+    },[serviceID])
 
     let isLoaded
     if(singleService.title){
