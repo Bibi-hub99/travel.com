@@ -1,14 +1,33 @@
 import {useEffect,useState,Suspense} from "react"
-import {useLoaderData,Await} from "react-router-dom"
+import {useLoaderData,Await,useSearchParams,useNavigate} from "react-router-dom"
 import ComponentLoader from "../loaders/component-loader"
 import ServiceStayCard from "../components/service-staycard"
 import ServiceTravelCard from "../components/services-travelcard"
+import Pagination from "../components/pagination"
+import {paginateServices} from "../crud/booking"
 
 function AllServicesPage(){
 
     const {services} = useLoaderData()
     const [servicesOffered,setServicesOffered] = useState([])
+    const [searchParams,setSearchParams] = useSearchParams()
 
+
+    const handlePage = async(skip,index) => {
+
+        try{
+            
+            const {data} = await paginateServices({skip:skip,limit:2})
+            setServicesOffered(data.services)
+        }catch(err){
+            console.log(err)
+        }
+
+        return 100
+
+    }
+
+    console.log(searchParams)
 
     return (
         <Suspense fallback={<ComponentLoader/>}>
@@ -68,6 +87,10 @@ function AllServicesPage(){
                                         )
                                     })
                                 }
+                            </div>
+
+                            <div className={'my-5 text-center '}>
+                                <Pagination handleClick={handlePage}/>
                             </div>
 
                         </div>
