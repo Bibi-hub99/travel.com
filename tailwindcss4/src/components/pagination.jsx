@@ -99,9 +99,6 @@ function Pagination(props){
                 //returning just the first element without any logic delibately
             })
 
-            console.log(firstElem)
-            console.log(findElem)
-
             const lastElemIndex = x.findIndex((each)=>{
                 return each.isOpened
             })
@@ -112,20 +109,24 @@ function Pagination(props){
             
             if(direction === 'forward'){
                 nextElem = findElem.number + 1
+                props.handlePageArrow(findElem.skip + 2)
             }else{
                 nextElem = findElem.number - 1
+                if(findElem.skip > 0){
+                    props.handlePageArrow(findElem.skip - 2)
+                }
             }
-            console.log(nextElem)
+
 
             if(nextElem > 0){
 
                 
                 if(lastElemIndex + 1 === findLength && direction === "forward"){
-                    console.log('add')
                     x = [...x.slice(1),{number:findElem.number + 1,isOpened:true,skip:findElem.skip + 2}]
+
                 }else if(firstElem.number > 1  && direction === "back"){
-                    console.log('remove')
                     x = [{number:firstElem.number -  1,isOpened:true,skip:firstElem.skip - 2},...x.slice(0,3)]
+
                 }
                 
                 return x.map((each) => {
@@ -140,8 +141,6 @@ function Pagination(props){
 
 
     }
-
-    console.log(pages)
 
 
     return (

@@ -9,7 +9,7 @@ import Button from "../components/button"
 function SingleServicePage(props){
 
     const [value] = useMyContext()
-    const {serviceID} = useParams()
+    const {serviceID,view} = useParams()
     const [singleService,setSingleService] = useState({})
     const [similarServices,setSimilarServices] = useState([])
 
@@ -19,6 +19,8 @@ function SingleServicePage(props){
 
     const checkState = ({isActive}) => isActive ? activeLink : inActiveLink
     //check if link is active then style it
+
+    console.log(view)
 
     useEffect(()=>{
 

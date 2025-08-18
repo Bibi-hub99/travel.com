@@ -16,7 +16,6 @@ function AllServicesPage(){
     const handlePage = async(skip,index) => {
 
         try{
-            console.log(skip + ' skip')
             const {data} = await paginateServices({skip:skip,limit:2})
             setServicesOffered(data.services)
         }catch(err){
@@ -26,11 +25,10 @@ function AllServicesPage(){
 
     }
 
-    const handlePageArrow = async(skip,direction) => {
+    const handlePageArrow = async(skip) => {
         try{
             const {data} = await paginateServices({skip:skip,limit:2})
-            console.log(data)
-            
+            setServicesOffered(data.services)
         }catch(err){
             console.log(err)
         }
@@ -98,7 +96,7 @@ function AllServicesPage(){
                             </div>
 
                             <div className={'my-5 text-center '}>
-                                <Pagination handleClick={handlePage}/>
+                                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
                             </div>
 
                         </div>

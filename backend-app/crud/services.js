@@ -6,7 +6,6 @@ const serviceModel = require("../models/services")
 const findServices = async(req,res,next) => {
     try{
         const services = await serviceModel.find({}).skip(req.query.skip).limit(req.query.limit)
-        console.log(req.query)
         res.status(200).json({success:true,services:services})
     }catch(err){
         next(err)   
@@ -17,10 +16,11 @@ const findByCategory = async(req,res,next) => {
     try{
 
         const queryObj = {}
-        const {category} = req.query
+        const {category,skip,limit,searchTerm} = req.query
         queryObj.category = {$eq:category}
+        console.log(category,skip,limit,searchTerm)
 
-        const services = await serviceModel.findByCategory(queryObj)
+        const services = await serviceModel.findByCategory(queryObj,skip,limit)
 
         res.status(200).json({success:true,services:services})
 
@@ -106,7 +106,7 @@ const queryServices = async(req,res,next) => {
             if(sort === "by_name"){
                 queryFinal = queryFinal.find({}).sort({title:1})
             }else if (sort === 'by_price_asc'){
-                queryFinal = queryFinal.find({}).sort({price:1})
+                queryFinal = queryFinal.find({}).sort({title:1})
             }else if (sort === 'by_price_des'){
                 queryFinal = queryFinal.find({}).sort({price:-1})
             }

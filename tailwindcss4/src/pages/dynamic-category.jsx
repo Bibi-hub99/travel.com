@@ -5,8 +5,10 @@ import {useState,useEffect} from "react"
 import {useParams} from "react-router-dom"
 import {findByCategory} from "../crud/booking"
 import ServiceTravel from "../components/services-travelcard"
+import ServiceStayCard from "../components/service-staycard"
 import TravelForm from "../components/travel-form"
 import Button from "../components/button"
+import Pagination from "../components/pagination"
 
 export default function DynamicCategory(){
 
@@ -14,13 +16,14 @@ export default function DynamicCategory(){
     const [servicesOffered,setServicesOffered] = useState([])
     const [isLoading,setIsLoading] = useState(false)
 
-    const isEq = params.category === "flights" || params.category === "buses"
+    const isEq = ['flights','buses'].some((each) => each === params.category)
 
     const [toggleState,setToggleState] = useState({
         showForm:false,
         btnInnerText:'search ticket'
     })
 
+    console.log(params.category)
 
     //handles toggling the ticket search form
     const toggleForm = ()=>{
@@ -46,25 +49,52 @@ export default function DynamicCategory(){
     }
 
 
+    const handlePage = async (skip,index) => {
+
+        try{
+            const {data} = await findByCategory('',params.category,skip,2)
+            setServicesOffered(data.services)
+         }catch(err){
+            console.log(err)
+        }
+
+    }
+
+    const handlePageArrow = async (skip) => {
+        try{
+            const {data} = await findByCategory('',params.category,skip,2)
+            setServicesOffered(data.services)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
     useEffect(()=>{
+
         const fetchServices = async()=>{
+
             try{
                 setIsLoading(true)
-                const {data} = await findByCategory(params.category)
+                const {data} = await findByCategory('',params.category,0,2)
                 setServicesOffered(data.services)
                 setIsLoading(false)
             }catch(err){
                 console.log(err)
             }
+
         }
         fetchServices()
-    },[params])
+    },[params.category])
+
 
     if(isLoading){
         return <ComponentLoader/>
     }
 
-    return (
+    isEq
+
+    return(
+
         <div className={''}>
 
             {!isEq && <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'}/>}
@@ -75,14 +105,18 @@ export default function DynamicCategory(){
                 {(isEq && toggleState.showForm) && <TravelForm />}
 
             <div className={'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
+
                 {
-                    params.category !== "activities" ? servicesOffered.length > 0 ? servicesOffered.map((each)=>{
+
+                    servicesOffered.length > 0 ? servicesOffered.map((each)=>{
 
                         const cardStyle = 'bg-white shadow-gray-400 shadow-xl/30 p-2 box-border p-4 rounded-xl'
 
                         const imageContainerStyle = 'h-[300px] md:h-[200px] relative'
 
                         return (
+
+                            each.category === 'flights' || each.category === 'buses' ? 
                             <ServiceTravel
                             key={`servicesOffered-cat${each._id}`}
                             cardStyle={cardStyle}
@@ -96,10 +130,34 @@ export default function DynamicCategory(){
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             isRelative={true}
                             infoStyle={'py-4 px-2 font-bold'}/>
-                            
+
+                            :
+
+                            <ServiceStayCard
+                            key={`servicesOffered${each._id}`}
+                            cardStyle={cardStyle}
+                            imageContainerStyle={imageContainerStyle}
+                            imageURL={each.imageURL}
+                            title={each.title}
+                            country={each.country}
+                            city={each.city}
+                            price={each.price}
+                            description={each.description}
+                            serviceURL={`../../service/information/${each._id}?bookingType=${each.category}&view=categories`}
+                            bookingURL={`../../services/booking-type/${each._id}?bookingType=${each.category}&view=each.categories`}
+                            isRelative={true}
+                            imageStyle={'h-full w-full object-cover rounded-xl'}
+                            infoStyle={'py-2 px-1 font-bold'}
+                            />
+
                         )
-                    }):<h2>No {params.category} found </h2>:<p></p>
+                    }):<h2>No {params.category} found </h2>
                 }
+
+            </div>
+            <div className={'text-center my-5'}>
+                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
+
             </div>
         </div>
     )

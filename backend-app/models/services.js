@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 
 const serviceSchema = new mongoose.Schema({
-    title:{type:String,required:true,unique:true},
+    title:{type:String,required:true,unique:true,get:(u)=>u.toUpperCase(),set:(u)=>u.toUpperCase()},
     providerID:{type:String,required:true},
     imageURL:{type:String,required:true,unique:true},
     description:{type:String,required:true},
@@ -19,8 +19,9 @@ const serviceSchema = new mongoose.Schema({
     }
 })
 
-serviceSchema.statics.findByCategory = async function findByCategory(queryObj){
-    const services = await this.find(queryObj)
+serviceSchema.statics.findByCategory = async function findByCategory(queryObj,skip,limit){
+    console.log(skip,limit)
+    const services = await this.find(queryObj).skip(skip).limit(limit)
     return services
 }
 
@@ -39,6 +40,8 @@ serviceSchema.methods.findSimilar = async function findSimilar(){
     const services = await mongoose.model("services").find({$and:[{category:this.category},{_id:{$ne:this._id}}]})
     return services
 }
+
+serviceSchema.get()
 
 const serviceModel = mongoose.model("services",serviceSchema,"services")
 

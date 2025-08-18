@@ -4,6 +4,7 @@ import {findByCategory,searchService} from "../crud/booking"
 import {useState,useEffect} from "react"
 import SearchForm from "../components/search-form"
 import ServiceStayCard from "../components/service-staycard"
+import Pagination from "../components/pagination"
 
 function CategoryIndex(){
 
@@ -41,10 +42,10 @@ function CategoryIndex(){
 
     useEffect(()=>{
 
-        const findServices = async()=>{
+        const findServices = async(searchTerm,category,skip,limit)=>{
             try{
                 setIsLoading(true)
-                const {data} = await findByCategory('stays')
+                const {data} = await findByCategory(searchTerm,category,skip,limit)
                 setServicesOffered(data.services)
                 setIsLoading(false)
             }catch(err){
@@ -52,10 +53,29 @@ function CategoryIndex(){
             }
         }
 
-        findServices()
+        findServices(searchText,'stays',0,2)
 
     },[])
 
+    const handlePage = async (skip,index) => {
+
+        try{
+            const {data} = await findByCategory(searchText,'stays',skip,2)
+            setServicesOffered(data.services)
+        }catch(err){
+            console.log(err)
+        }
+
+    }
+
+    const handlePageArrow = async(skip) => {
+        try{
+            const {data} = await findByCategory(searchText,'stays',skip,2)
+            setServicesOffered(data.services)
+        }catch(err){
+            console.log(err)
+        }
+    }
 
 
     //loader component to display while fetching data from the server
@@ -96,6 +116,9 @@ function CategoryIndex(){
 
                     }):<p>No houses found</p>
                 }
+            </div>
+            <div className={'my-5 text-center'}>
+                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
             </div>
         </div>
     )

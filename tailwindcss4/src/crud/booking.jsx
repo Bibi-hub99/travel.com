@@ -11,13 +11,14 @@ export const findServices = async()=>{
     return defer({services:services})
 }
 
+//handles pagination logic for the all services page of a website
 export const paginateServices = async ({skip,limit}) => {
     const services = axios.get(`${baseURL}/services?skip=${skip}&limit=${limit}`)
     return services
 }
-
-export const findByCategory = async(category)=>{
-    const services = axios.get(`${baseURL}/services/categories?category=${category}`)
+//handles filtering by category logic and also applies pagination
+export const findByCategory = async(searchTerm,category,skip,limit)=>{
+    const services = axios.get(`${baseURL}/services/categories?searchTerm=${searchTerm}&category=${category}&skip=${skip}&limit=${limit}`)
     return services
 }
 
