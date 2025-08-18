@@ -24,6 +24,7 @@ function Dashboard(){
 
                 <br></br>
                 <div>
+                    
                     <NavLink className={isActive} to={'.'} end>{value.icons[15].icon}</NavLink>
                     <NavLink className={isActive} to={'profile?page=profile'}>{value.icons[16].icon}</NavLink>
                     <NavLink className={isActive} to={'adminstrator?page=adminstration'}>{value.icons[17].icon}</NavLink>

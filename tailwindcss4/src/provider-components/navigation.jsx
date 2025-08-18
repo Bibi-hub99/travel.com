@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import Button from "../components/button"
 import Profile from "./profile"
 
-function ProviderNav(){
+function ProviderNav(props){
 
     const [value] = useMyContext()
 
@@ -20,6 +20,7 @@ function ProviderNav(){
                     btnInnerText={value.icons[1].icon}
                     btnStyle={btnStyle}
                     btnType={'button'}
+                    handleClick={()=>props.toggleSlideWidth(100)}
                     />
                 </div>
 

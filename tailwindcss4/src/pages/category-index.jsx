@@ -108,8 +108,8 @@ function CategoryIndex(){
                         city={each.location.city}
                         price={each.price}
                         description={each.description}
-                        serviceURL={`service/information/${each._id}?serviceType=${each.category}`}
-                        bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}`}
+                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories`}
+                        bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                         isRelative={true}
                         imageStyle={'h-full w-full object-cover rounded-xl'}
                         infoStyle={'py-2 px-1 font-bold'}/>

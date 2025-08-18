@@ -124,10 +124,12 @@ const routerPages = createBrowserRouter([
         ]
     },
     {
+        //we provide false on urlLink so the routing which will be applied is the one we defined
+        //not one passed as props since we passed false and isRelative we give it true for route to be relative
         path:'booking/categories/service/information/:serviceID',
         element:(
             <Suspense fallback={<Loading/>}>
-                <SingleServicePage urlLink={'../../..'} isRelative={true}/>
+                <SingleServicePage urlLink={false} isRelative={true}/>
             </Suspense>
         )
     },

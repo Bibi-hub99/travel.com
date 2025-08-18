@@ -125,8 +125,8 @@ export default function DynamicCategory(){
                             price={each.price}
                             depart={`${each.location.country}, ${each.location.country}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}`}
-                            bookingURL={`../../service/booking-type/${each._id}?bookingType=${each.category}`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories`}
+                            bookingURL={`../../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             isRelative={true}
                             infoStyle={'py-4 px-2 font-bold'}/>
@@ -143,7 +143,7 @@ export default function DynamicCategory(){
                             city={each.city}
                             price={each.price}
                             description={each.description}
-                            serviceURL={`../../service/information/${each._id}?bookingType=${each.category}&view=categories`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories`}
                             bookingURL={`../../services/booking-type/${each._id}?bookingType=${each.category}&view=each.categories`}
                             isRelative={true}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
