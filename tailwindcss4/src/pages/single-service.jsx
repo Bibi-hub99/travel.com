@@ -22,14 +22,20 @@ function SingleServicePage(props){
     //check if link is active then style it
 
     const serviceType = searchParams.get("serviceType")
+    const searchTerm = searchParams.get("searchTerm")
+    const depart = searchParams.get("depart")
+    const arrival = searchParams.get("arrival")
+    const date = searchParams.get("date")
     /*link applied conditionally if page rendered was not called under index page of categories, it is for dynamic routing to the categories opposed to routing to index page
         for smooth user experience e.g continue where left off in navigation
     */
 
     //this logic is based on the fact that we render categories page of stays as index then others dynamically
     //therefore we have to check if serviceType which is category matches stays to route to index or any of the ones rendered dynamically
-    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchParams.get("searchTerm")}`:`../../..?searchTerm=${searchParams.get("searchTerm")}`
-                            
+
+    const isTravel = ['flights','buses'].some((each)=>each === serviceType)
+    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchTerm}`:`../../..?searchTerm=${searchTerm}`
+    const conditionalLink2 = `../../../${serviceType}?depart=${depart}&arrival=${arrival}&date=${date}`
 
     useEffect(()=>{
 
@@ -60,7 +66,7 @@ function SingleServicePage(props){
             {isLoaded && <div>
 
                 <div className={`${props.singleServiceStyle} ${value.containerStyle}  pt-10 relative`}>
-                    <NavLink to={`${props.urlLink || conditionalLink}`} relative={props.isRelative ? "path":"route"} className={'absolute top-1 left-1 px-5 py-1 rounded-tl-full text-white bg-black'}>Back</NavLink>
+                    <NavLink to={`${!isTravel ? conditionalLink:conditionalLink2}`} relative={props.isRelative ? "path":"route"} className={'absolute top-1 left-1 px-5 py-1 rounded-tl-full text-white bg-black'}>Back</NavLink>
                     <div className={`h-[400px] rounded-xl relative`}>
 
                         <Image imageURL={singleService.imageURL} imageStyle={'h-full w-[100%] object-cover rounded-xl'}/>

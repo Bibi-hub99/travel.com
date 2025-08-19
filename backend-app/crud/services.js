@@ -274,6 +274,26 @@ const deleteService = async (req,res,next) => {
     }catch(err){
         console.log(err)
     }
+
+}
+
+const searchTravelTickets = async (req,res,next) => {
+    try{
+        let {depart,arrival,category,time} = req.query
+        depart = `${depart}`.slice(0,1).toUpperCase() + `${depart}`.slice(1)
+        arrival = `${arrival}`.slice(0,1).toUpperCase() + `${arrival}`.slice(1)
+
+        const queryObj = {
+            'location.city':depart,
+            'uniqueFeatures.tripToAddress.city':arrival,
+            category:category
+        }
+        
+        const services = await serviceModel.find(queryObj)
+        res.status(200).json({success:true,services:services})
+    }catch(err){
+        console.log(err)
+    }
 }
 
 module.exports = {
@@ -285,5 +305,6 @@ module.exports = {
     addService,
     updateService,
     getProviderServices,
-    deleteService
+    deleteService,
+    searchTravelTickets
 }

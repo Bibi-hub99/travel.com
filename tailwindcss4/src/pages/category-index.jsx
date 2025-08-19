@@ -27,11 +27,12 @@ function CategoryIndex(){
 
     }
 
-    const handleSubmit = (evt)=>{
+    const handleSearch = (evt)=>{
 
         evt.preventDefault()
 
         const search = async()=>{
+        
             try{
                 setIsLoading(true)
                 const {data} = await findByCategory(searchText,'stays',0,2)
@@ -90,7 +91,6 @@ function CategoryIndex(){
         }
     }
 
-
     //loader component to display while fetching data from the server
 
     if(isLoading){
@@ -102,8 +102,8 @@ function CategoryIndex(){
             <SearchForm 
             formStyle={'py-1 px-2 rounded-xl mt-1'} 
             inputValue={searchText} 
-            handleSubmit={handleSubmit}
-            inputChange={handleChange}/>
+            handleSearch={handleSearch}
+            handleChange={handleChange}/>
             <div className={'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
                 {
                     servicesOffered.length > 0 ? servicesOffered.map((each)=>{

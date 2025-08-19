@@ -2,28 +2,46 @@
 import ComponentLoader from '../loaders/component-loader'
 import SearchForm from "../components/search-form"
 import {useState,useEffect} from "react"
-import {useParams} from "react-router-dom"
+import {useParams,useSearchParams} from "react-router-dom"
 import {findByCategory} from "../crud/booking"
 import ServiceTravel from "../components/services-travelcard"
 import ServiceStayCard from "../components/service-staycard"
 import TravelForm from "../components/travel-form"
 import Button from "../components/button"
 import Pagination from "../components/pagination"
+import {searchTravelTickets} from "../crud/services"
 
 export default function DynamicCategory(){
 
     const params = useParams()
     const [servicesOffered,setServicesOffered] = useState([])
     const [isLoading,setIsLoading] = useState(false)
+    const category  = params.category
 
-    const isEq = ['flights','buses'].some((each) => each === params.category)
+    const [searchParams,setSearchParams] = useSearchParams()
+
+    //we are extracting searchTerm from the back to link generated when clicking eye icon to view service to fetch the previously searched services for smooth UI/UX
+    const searchTerm = searchParams.get("searchTerm") !== null && searchParams.get("searchTerm") !== 'null' ? searchParams.get("searchTerm"):""
+    const depart = searchParams.get("depart") !== null && searchParams.get("depart") !== "null" ? searchParams.get("depart"):""
+    const arrival = searchParams.get("arrival") !== null && searchParams.get("arrival") !== "null" ? searchParams.get("arrival"):""
+    const date = searchParams.get("date") !== null && searchParams.get("date") !== "null" ? searchParams.get('date'):""
+
+    const [searchText,setSearchText] = useState(searchTerm)
+    const [searchTicket,setSearchTicket] = useState({
+        depart:depart,
+        arrival:arrival,
+        date:date
+    })
+    const [limitToSearch,setLimitToSearch] = useState(false)
+
+    //we check if category is any of the ones in the array to render a form logically
+    const isEq = ['flights','buses'].some((each) => each === category)
 
     const [toggleState,setToggleState] = useState({
         showForm:false,
         btnInnerText:'search ticket'
     })
 
-    console.log(params.category)
 
     //handles toggling the ticket search form
     const toggleForm = ()=>{
@@ -52,8 +70,21 @@ export default function DynamicCategory(){
     const handlePage = async (skip,index) => {
 
         try{
-            const {data} = await findByCategory('',params.category,skip,2)
-            setServicesOffered(data.services)
+
+            let services = []
+
+            if(limitToSearch){
+
+                const {depart,arrival,date} = searchTicket
+                const {data} = await searchTravelTickets({depart,arrival,category,date})
+                services = [...data.services]
+
+            }else{
+                const {data} = await findByCategory('',category,skip,2)
+                services = [...data.services]
+            }
+            setServicesOffered(services)
+
          }catch(err){
             console.log(err)
         }
@@ -62,7 +93,22 @@ export default function DynamicCategory(){
 
     const handlePageArrow = async (skip) => {
         try{
-            const {data} = await findByCategory('',params.category,skip,2)
+
+            let services = []
+
+            if(limitToSearch){
+
+                const {depart,arrival,date} = searchTicket
+                const {data} = await searchTravelTickets({depart,arrival,category,date})
+                services = [...data.services]
+
+            }else{
+
+                const {data} = await findByCategory('',category,skip,2)
+                services = [...data.services]
+
+
+            }
             setServicesOffered(data.services)
         }catch(err){
             console.log(err)
@@ -73,9 +119,16 @@ export default function DynamicCategory(){
 
         const fetchServices = async()=>{
 
+            const services = []
+
             try{
                 setIsLoading(true)
-                const {data} = await findByCategory('',params.category,0,2)
+                if(limitToSearch){
+                    const {depart,arrival,date} = searchTicket
+                    const {data} = await searchTravelTickets({depart,arrival,category,date})
+                }else{
+                    const {data} = await findByCategory('',category,0,2)
+                }
                 setServicesOffered(data.services)
                 setIsLoading(false)
             }catch(err){
@@ -91,18 +144,74 @@ export default function DynamicCategory(){
         return <ComponentLoader/>
     }
 
-    isEq
+    //handles ticket search input change for travel bookings services
+
+    const handleTicketChange = (evt) => {
+
+        const {name,value} = evt.target
+
+        setSearchTicket((oldValue) => {
+            return {
+                ...oldValue,
+                [name]:value
+            }
+        })
+
+
+    }
+
+    //handles input change for activity non travel services, remember we rendered this dynamically for different services
+
+    const handleTextChange = (evt) => {
+        const {value} = evt.target
+        setSearchText(value)
+    }
+    
+    const handleSearch = async () => {
+
+        try{
+
+            if(['stays','activities'].some((each)=>each === category)){
+                const {data} = await findByCategory(searchText,category,0,2)
+                setServicesOffered(data.services)
+            }
+
+        }catch(err){
+            console.log(err)
+        }
+
+    }
+
+    const handleSearchTicket = async(evt) => {
+
+        evt.preventDefault()
+        try{
+
+            const {depart,arrival,date} = searchTicket
+            const {data} = await searchTravelTickets({depart,arrival,category,date})
+            setServicesOffered(data.services)
+
+        }catch(err){
+            console.log(err)
+        }
+
+    }
 
     return(
 
         <div className={''}>
 
-            {!isEq && <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'}/>}
+            {!isEq && <SearchForm formStyle={'py-1 px-2 rounded-xl mt-1'} inputValue={searchText} handleChange={handleTextChange} handleSearch={handleSearch}/>}
                 {isEq && <Button
                 btnInnerText={`${toggleState.btnInnerText}`}
-                btnStyle={'bg-blue-400 w-[100%] py-2 my-2 box-border cursor-pointer'}
+                btnStyle={'bg-blue-400 w-[100%] py-2 my-2 box-border cursor-pointer rounded-lg'}
                 handleClick={toggleForm}/>}
-                {(isEq && toggleState.showForm) && <TravelForm />}
+                {(isEq && toggleState.showForm) && <TravelForm 
+                handleChange={handleTicketChange}
+                handleSearchTicket={handleSearchTicket}
+                depart={searchTicket.depart} 
+                arrival={searchTicket.arrival} 
+                date={searchTicket.date}/>}
 
             <div className={'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
 
@@ -123,9 +232,9 @@ export default function DynamicCategory(){
                             imageContainerStyle={imageContainerStyle}
                             imageURL={each.imageURL}
                             price={each.price}
-                            depart={`${each.location.country}, ${each.location.country}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
+                            depart={`${each.location.country}, ${each.location.city}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&depart=${searchTicket.depart}&arrival=${searchTicket.arrival}&date=${searchTicket.date}`}
                             bookingURL={`../../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             isRelative={true}
@@ -143,15 +252,15 @@ export default function DynamicCategory(){
                             city={each.city}
                             price={each.price}
                             description={each.description}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories`}
-                            bookingURL={`../../services/booking-type/${each._id}?bookingType=${each.category}&view=each.categories`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}`}
+                            bookingURL={`../../services/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             isRelative={true}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             infoStyle={'py-2 px-1 font-bold'}
                             />
 
                         )
-                    }):<h2>No {params.category} found </h2>
+                    }):<h2>No {category} found </h2>
                 }
 
             </div>

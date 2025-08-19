@@ -8,12 +8,14 @@ function SearchForm(props){
 
     return (
         <form name={'search-form'} className={props.formStyle}>
+
             <div className={'flex justify-between'}>
 
                 <Input
                 inputType={'text'}
+                inputName={'searchText'}
                 inputValue={props.inputValue}
-                inputChange={props.inputChange}
+                inputChange={props.handleChange}
                 inputStyle={'border-1 w-[84%] py-2 rounded-xl outline-none px-2 box-border'}
                 />
 
@@ -21,7 +23,7 @@ function SearchForm(props){
                 btnType={'button'}
                 btnInnerText={value.icons[0].icon}
                 btnStyle={'bg-black text-white w-[15%] rounded-xl cursor-pointer'}
-                handleClick={props.handleSubmit}
+                handleClick={props.handleSearch}
                 />
 
             </div>

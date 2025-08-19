@@ -34,3 +34,8 @@ export const getProductData = async ({serviceID,jwtToken}) => {
     const response = await axios.get(`${baseURL}/protected/services/get-comments/${serviceID}`,{headers:{Authorization:jwtToken}})
     return response
 }
+
+export const searchTravelTickets = async({depart,arrival,category,time}) => {
+    const response = await axios.get(`${baseURL}/services/search-travel-tickets?depart=${depart}&arrival=${arrival}&category=${category}&time=${time}`)
+    return response
+}
