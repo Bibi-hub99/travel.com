@@ -5,12 +5,20 @@ import {useState,useEffect} from "react"
 import SearchForm from "../components/search-form"
 import ServiceStayCard from "../components/service-staycard"
 import Pagination from "../components/pagination"
+import {useSearchParams} from "react-router-dom"
 
 function CategoryIndex(){
 
     const [servicesOffered,setServicesOffered] = useState([])
     const [isLoading,setIsLoading] = useState(false)
-    const [searchText,setSearchText] = useState("")
+    const [searchParams,setSearchParams] = useSearchParams()
+
+    const searchTextParam = searchParams.get('searchTerm')
+
+    const searchTextValue = searchTextParam !== null && searchTextParam !== "null" ? searchTextParam:''
+
+    const [searchText,setSearchText] = useState(searchTextValue)
+
 
     const handleChange = (evt)=>{
 
@@ -23,10 +31,10 @@ function CategoryIndex(){
 
         evt.preventDefault()
 
-        const search = async(searchTerm,category)=>{
+        const search = async()=>{
             try{
                 setIsLoading(true)
-                const {data} = await searchService(searchTerm,category)
+                const {data} = await findByCategory(searchText,'stays',0,2)
                 setServicesOffered(data.services)
                 setIsLoading(false)
             }catch(err){
@@ -43,19 +51,24 @@ function CategoryIndex(){
     useEffect(()=>{
 
         const findServices = async(searchTerm,category,skip,limit)=>{
+
             try{
+
                 setIsLoading(true)
                 const {data} = await findByCategory(searchTerm,category,skip,limit)
                 setServicesOffered(data.services)
                 setIsLoading(false)
+                
             }catch(err){
                 console.log(err)
             }
+
         }
 
         findServices(searchText,'stays',0,2)
 
     },[])
+
 
     const handlePage = async (skip,index) => {
 
@@ -108,8 +121,8 @@ function CategoryIndex(){
                         city={each.location.city}
                         price={each.price}
                         description={each.description}
-                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories`}
-                        bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
+                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}`}
+                        bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}&view=categories&searchTerm=${searchText}`}
                         isRelative={true}
                         imageStyle={'h-full w-full object-cover rounded-xl'}
                         infoStyle={'py-2 px-1 font-bold'}/>

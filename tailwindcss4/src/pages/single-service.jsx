@@ -28,7 +28,7 @@ function SingleServicePage(props){
 
     //this logic is based on the fact that we render categories page of stays as index then others dynamically
     //therefore we have to check if serviceType which is category matches stays to route to index or any of the ones rendered dynamically
-    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}`:'../../..'
+    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchParams.get("searchTerm")}`:`../../..?searchTerm=${searchParams.get("searchTerm")}`
                             
 
     useEffect(()=>{

@@ -17,9 +17,10 @@ const findByCategory = async(req,res,next) => {
 
         const queryObj = {}
         const {category,skip,limit,searchTerm} = req.query
-        queryObj.category = {$eq:category}
-        console.log(category,skip,limit,searchTerm)
-
+        if(searchTerm !== "" && searchTerm !== undefined && searchTerm !== "undefined"){
+            queryObj.$text = {$search:`\"${searchTerm}\"`}
+        }
+        queryObj.category = category
         const services = await serviceModel.findByCategory(queryObj,skip,limit)
 
         res.status(200).json({success:true,services:services})

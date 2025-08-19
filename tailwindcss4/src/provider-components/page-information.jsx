@@ -10,7 +10,7 @@ function PageInformation(props){
     const page = searchParams.get("page") || "home"
 
     return (
-        <div className={'py-6 bg-gray-100 px-2 box-border'}>
+        <div className={'py-6 bg-gray-100 px-2 box-border mt-14'}>
             <p className={'text-[1.1rem] capitalize'}>{value.icons[20].icon} {page}</p>
         </div>
     )

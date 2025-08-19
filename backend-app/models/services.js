@@ -20,7 +20,7 @@ const serviceSchema = new mongoose.Schema({
 })
 
 serviceSchema.statics.findByCategory = async function findByCategory(queryObj,skip,limit){
-    console.log(skip,limit)
+    
     const services = await this.find(queryObj).skip(skip).limit(limit)
     return services
 }

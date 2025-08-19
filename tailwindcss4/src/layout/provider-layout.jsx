@@ -9,7 +9,7 @@ import {useState} from "react"
 function ProviderLayout(){
 
     const [value] = useMyContext()
-    const [width,setWidth] = useState('100%')
+    const [width,setWidth] = useState('0%')
 
     const toggleSlideWidth = (width) => {
         setWidth(`${width}%`)
