@@ -26,6 +26,7 @@ function SingleServicePage(props){
     const depart = searchParams.get("depart")
     const arrival = searchParams.get("arrival")
     const date = searchParams.get("date")
+    const limitToTicket = searchParams.get("limitToTicket")
     /*link applied conditionally if page rendered was not called under index page of categories, it is for dynamic routing to the categories opposed to routing to index page
         for smooth user experience e.g continue where left off in navigation
     */
@@ -35,7 +36,7 @@ function SingleServicePage(props){
 
     const isTravel = ['flights','buses'].some((each)=>each === serviceType)
     const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchTerm}`:`../../..?searchTerm=${searchTerm}`
-    const conditionalLink2 = `../../../${serviceType}?depart=${depart}&arrival=${arrival}&date=${date}`
+    const conditionalLink2 = `../../../${serviceType}?depart=${depart}&arrival=${arrival}&date=${date}&limitToTicket=${limitToTicket}`
 
     useEffect(()=>{
 

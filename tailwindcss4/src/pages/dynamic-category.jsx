@@ -25,6 +25,7 @@ export default function DynamicCategory(){
     const depart = searchParams.get("depart") !== null && searchParams.get("depart") !== "null" ? searchParams.get("depart"):""
     const arrival = searchParams.get("arrival") !== null && searchParams.get("arrival") !== "null" ? searchParams.get("arrival"):""
     const date = searchParams.get("date") !== null && searchParams.get("date") !== "null" ? searchParams.get('date'):""
+    const limitToTicket = searchParams.get("limitToTicket") !== null && searchParams.get("limitToTicket") !== "null" ? searchParams.get("limitToTicket"):false
 
     const [searchText,setSearchText] = useState(searchTerm)
     const [searchTicket,setSearchTicket] = useState({
@@ -32,7 +33,7 @@ export default function DynamicCategory(){
         arrival:arrival,
         date:date
     })
-    const [limitToSearch,setLimitToSearch] = useState(false)
+    const [limitToSearchTicket,setLimitToSearchTicket] = useState(limitToTicket)
 
     //we check if category is any of the ones in the array to render a form logically
     const isEq = ['flights','buses'].some((each) => each === category)
@@ -41,7 +42,6 @@ export default function DynamicCategory(){
         showForm:false,
         btnInnerText:'search ticket'
     })
-
 
     //handles toggling the ticket search form
     const toggleForm = ()=>{
@@ -71,65 +71,67 @@ export default function DynamicCategory(){
 
         try{
 
-            let services = []
 
-            if(limitToSearch){
+            if(limitToSearchTicket === 'true'){
 
                 const {depart,arrival,date} = searchTicket
                 const {data} = await searchTravelTickets({depart,arrival,category,date})
-                services = [...data.services]
+                setServicesOffered([])
 
             }else{
                 const {data} = await findByCategory('',category,skip,2)
-                services = [...data.services]
+                setServicesOffered(data.services)
             }
-            setServicesOffered(services)
 
          }catch(err){
             console.log(err)
         }
 
+
     }
 
     const handlePageArrow = async (skip) => {
+
         try{
 
-            let services = []
 
-            if(limitToSearch){
+            if(limitToSearchTicket === 'true'){
 
                 const {depart,arrival,date} = searchTicket
                 const {data} = await searchTravelTickets({depart,arrival,category,date})
-                services = [...data.services]
+                setServicesOffered(data.services)
 
             }else{
 
                 const {data} = await findByCategory('',category,skip,2)
-                services = [...data.services]
-
+                setServicesOffered(data.services)
 
             }
-            setServicesOffered(data.services)
+
         }catch(err){
             console.log(err)
         }
+
     }
 
     useEffect(()=>{
 
         const fetchServices = async()=>{
 
-            const services = []
-
             try{
+
+
                 setIsLoading(true)
-                if(limitToSearch){
+                if(limitToSearchTicket === 'true'){
                     const {depart,arrival,date} = searchTicket
                     const {data} = await searchTravelTickets({depart,arrival,category,date})
-                }else{
+                    console.log(data)
+                    setServicesOffered(data.services)
+
+                }else if(limitToSearchTicket !== "true"){
                     const {data} = await findByCategory('',category,0,2)
+                    setServicesOffered(data.services)
                 }
-                setServicesOffered(data.services)
                 setIsLoading(false)
             }catch(err){
                 console.log(err)
@@ -156,7 +158,6 @@ export default function DynamicCategory(){
                 [name]:value
             }
         })
-
 
     }
 
@@ -185,11 +186,13 @@ export default function DynamicCategory(){
     const handleSearchTicket = async(evt) => {
 
         evt.preventDefault()
+
         try{
 
             const {depart,arrival,date} = searchTicket
             const {data} = await searchTravelTickets({depart,arrival,category,date})
             setServicesOffered(data.services)
+            setLimitToSearchTicket(true)
 
         }catch(err){
             console.log(err)
@@ -234,7 +237,7 @@ export default function DynamicCategory(){
                             price={each.price}
                             depart={`${each.location.country}, ${each.location.city}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&depart=${searchTicket.depart}&arrival=${searchTicket.arrival}&date=${searchTicket.date}`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&depart=${searchTicket.depart}&arrival=${searchTicket.arrival}&date=${searchTicket.date}&limitToTicket=${limitToSearchTicket}`}
                             bookingURL={`../../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             isRelative={true}
