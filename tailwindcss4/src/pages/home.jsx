@@ -70,7 +70,7 @@ function Home(){
                                 </div>
                                 <div className={'h-[100vh] md:h-[80vh] relative'}>
 
-                                    <div className={`h-[100%] md:h-[90%] ${background1} bg-no-repeat bg-cover bg-center relative flex flex-col justify-center`} >
+                                    <div className={`h-[100%] md:h-[90%] bg-[url(https://media.istockphoto.com/id/2222211983/photo/durban-beachfront-cityscape-with-skyscrapers.webp?a=1&b=1&s=612x612&w=0&k=20&c=Yj4dyUypCMO3Q6cfHUVodSjPNxPdnLqW86J561aqQUM=)] bg-no-repeat bg-cover bg-center relative flex flex-col justify-center`} >
                                         <div className={'text-center font-bold text-white text-[1.2rem] text-shadow-black text-shadow-lg md:text-[1.5rem]'}>
                                             <h2 className={''}>Explore the world with our help, all organized in a simple and lovely way</h2>
                                             <br></br>

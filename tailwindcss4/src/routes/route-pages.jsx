@@ -51,7 +51,7 @@ const routerPages = createBrowserRouter([
                 children:[
                     {
                         index:true,
-                        loader:findServices,
+                        //loader:findServices,
                         element:(
                             <Suspense fallback={<Loading/>}>
                                 <AllServicesPage/>
@@ -94,7 +94,7 @@ const routerPages = createBrowserRouter([
         element:(
             <Suspense fallback={<Loading/>}>
                     <SingleServicePage urlLink={'../../..'} isRelative={true}/>
-                </Suspense>
+            </Suspense>
         ),
         children:[
             {
@@ -131,7 +131,34 @@ const routerPages = createBrowserRouter([
             <Suspense fallback={<Loading/>}>
                 <SingleServicePage urlLink={false} isRelative={true}/>
             </Suspense>
-        )
+        ),
+        children:[
+            {
+                index:true,
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <ServiceInfoPage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:'comments',
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <CommentsPage/>
+                    </Suspense>
+                )
+            },
+            {
+                path:"similar-items",
+                element:(
+                    <Suspense fallback={<Loading/>}>
+                        <SimilarPage/>
+                    </Suspense>
+                )
+            }
+        ]
+        
     },
     {
         path:'services/search',
@@ -165,15 +192,15 @@ const routerPages = createBrowserRouter([
                 path:'service-provider',
                 element:<ServiceProviderSignUp/>
             }
-        ]
+        ]                                                                                                                                                                                                                                                                                                                                                                                                                                        
     },
     {
         path:"booking/service/booking-type/:serviceID",
-        element:(
+        element:( 
             <Suspense>
                 <BookingService/>
             </Suspense>
-        )
+        )                                               
     },
     {
         path:'service-provider',
@@ -224,6 +251,10 @@ const routerPages = createBrowserRouter([
                 )
             }
         ]
+    },
+    {
+        path:'*',
+        element:<h1>Page not found</h1>
     }
 
 ])

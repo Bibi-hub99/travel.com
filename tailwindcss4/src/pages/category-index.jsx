@@ -7,17 +7,26 @@ import ServiceStayCard from "../components/service-staycard"
 import Pagination from "../components/pagination"
 import {useSearchParams} from "react-router-dom"
 
+
 function CategoryIndex(){
 
     const [servicesOffered,setServicesOffered] = useState([])
     const [isLoading,setIsLoading] = useState(false)
     const [searchParams,setSearchParams] = useSearchParams()
-
     const searchTextParam = searchParams.get('searchTerm')
+
+    const prevSlideIndex = searchParams.get("prevIndex") !== null && searchParams.get("prevIndex") !== "null" ? searchParams.get("prevIndex"):0
+    const prevIndexSlide = searchParams.get("prevSlide") !== null && searchParams.get("prevSlide") !== "null" ? searchParams.get("prevSlide"):0
 
     const searchTextValue = searchTextParam !== null && searchTextParam !== "null" ? searchTextParam:''
 
     const [searchText,setSearchText] = useState(searchTextValue)
+    
+    const [prevIndex,setPrevIndex] = useState(prevSlideIndex)
+    const [prevSlide,setPrevSlide] = useState(prevIndexSlide)
+
+    console.log(prevIndex)
+    console.log(prevIndexSlide)
 
 
     const handleChange = (evt)=>{
@@ -37,6 +46,8 @@ function CategoryIndex(){
                 setIsLoading(true)
                 const {data} = await findByCategory(searchText,'stays',0,2)
                 setServicesOffered(data.services)
+                setPrevIndex(0)
+                setPrevSlide(0)
                 setIsLoading(false)
             }catch(err){
                 console.log(err)
@@ -47,6 +58,26 @@ function CategoryIndex(){
             search(searchText,"stays")
         }
 
+    }
+
+    const clearSearch = async (evt) => {
+        evt.preventDefault()
+        try{
+
+            if(searchText.length > 0){
+
+                setSearchText("")
+                setPrevIndex(0)
+                setPrevSlide(0)
+
+                const {data} = await findByCategory("","stays",0,2)
+                setServicesOffered(data.services)
+
+            }
+
+        }catch(err){
+
+        }
     }
 
     useEffect(()=>{
@@ -66,7 +97,7 @@ function CategoryIndex(){
 
         }
 
-        findServices(searchText,'stays',0,2)
+        findServices(searchText,'stays',prevIndex,2)
 
     },[])
 
@@ -76,16 +107,20 @@ function CategoryIndex(){
         try{
             const {data} = await findByCategory(searchText,'stays',skip,2)
             setServicesOffered(data.services)
+            setPrevIndex(skip)
+            setPrevSlide(index)
         }catch(err){
             console.log(err)
         }
 
     }
 
-    const handlePageArrow = async(skip) => {
+    const handlePageArrow = async(skip,index) => {
         try{
             const {data} = await findByCategory(searchText,'stays',skip,2)
             setServicesOffered(data.services)
+            setPrevIndex(skip)
+            setPrevSlide(index)
         }catch(err){
             console.log(err)
         }
@@ -103,6 +138,7 @@ function CategoryIndex(){
             formStyle={'py-1 px-2 rounded-xl mt-1'} 
             inputValue={searchText} 
             handleSearch={handleSearch}
+            handleClearSearch={clearSearch}
             handleChange={handleChange}/>
             <div className={'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
                 {
@@ -121,7 +157,7 @@ function CategoryIndex(){
                         city={each.location.city}
                         price={each.price}
                         description={each.description}
-                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}`}
+                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}&prevIndex=${prevIndex}&prevSlide=${prevSlide}`}
                         bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}&view=categories&searchTerm=${searchText}`}
                         isRelative={true}
                         imageStyle={'h-full w-full object-cover rounded-xl'}
@@ -131,7 +167,7 @@ function CategoryIndex(){
                 }
             </div>
             <div className={'my-5 text-center'}>
-                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
+                <Pagination handlePage={handlePage} prevIndex={prevIndex} prevSlide={prevSlide} handlePageArrow={handlePageArrow}/>
             </div>
         </div>
     )

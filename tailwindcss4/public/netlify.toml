@@ -1,0 +1,5 @@
+[[redirects]]
+
+FROM = "/*"
+TO = index.html
+STATUS = 200

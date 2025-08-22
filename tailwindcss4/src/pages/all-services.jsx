@@ -8,16 +8,43 @@ import {paginateServices} from "../crud/booking"
 
 function AllServicesPage(){
 
-    const {services} = useLoaderData()
+
+    //const {services} = useLoaderData()
+
     const [servicesOffered,setServicesOffered] = useState([])
     const [searchParams,setSearchParams] = useSearchParams()
 
+    const prevSlideIndex = searchParams.get("prevIndex") !== null && searchParams.get("prevIndex") !== "null" ? searchParams.get("prevIndex") : 0
+    const prevIndexSlide = searchParams.get("prevSlide") !== null && searchParams.get("prevSlide") !== "null" ? searchParams.get("prevSlide") : 0
+
+    //const prevSlideIndex = searchParams.get("prevIndex") !== null && searchParams.get("null") ? searchParams.get("")
+
+    const [prevIndex,setPrevIndex] = useState(prevSlideIndex)
+    const [prevSlide,setPrevSlide] = useState(prevIndexSlide)
+
+    useEffect(() => {
+
+        const findServices = async(skip,limit) => {
+            try{
+                const {data} = await paginateServices({skip,limit})
+                console.log(data)
+                setServicesOffered(data.services)
+            }catch(err){
+                console.log(err)
+            }
+        }
+
+        findServices(prevSlideIndex,2)
+
+    },[])
 
     const handlePage = async(skip,index) => {
 
         try{
             const {data} = await paginateServices({skip:skip,limit:2})
             setServicesOffered(data.services)
+            setPrevIndex(skip)
+            setPrevSlide(index)
         }catch(err){
             console.log(err)
         }
@@ -25,35 +52,41 @@ function AllServicesPage(){
 
     }
 
-    const handlePageArrow = async(skip) => {
+
+
+    const handlePageArrow = async(skip,index) => {
+
         try{
             const {data} = await paginateServices({skip:skip,limit:2})
             setServicesOffered(data.services)
+            setPrevIndex(skip)
+            setPrevSlide(index)
         }catch(err){
             console.log(err)
         }
+
     }
 
 
     return (
-        <Suspense fallback={<ComponentLoader/>}>
-            <Await resolve={services}>
-                {
-                    ({data})=>(
+        //<Suspense fallback={<ComponentLoader/>}>
+            //<Await resolve={services}>
+                //{
+                //    ({data})=>(
                         <div>
 
-                            <div>
+                            {/*<div>
                                 {
                                     useEffect(()=>{
                                         setServicesOffered(data.services)
                                     },[])
                                 }
-                            </div>
+                            </div>*/}
 
                             <div className={'mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 xl:grid-cols-3'}>
 
                                 {
-                                    servicesOffered.map((each)=>{
+                                    servicesOffered.length > 0 ? servicesOffered.map((each)=>{
 
                                         const cardStyle = 'bg-white shadow-gray-400 shadow-xl/30 p-2 box-border p-4 rounded-xl'
 
@@ -71,7 +104,7 @@ function AllServicesPage(){
                                             city={each.location.city}
                                             price={each.price}
                                             description={each.description}
-                                            serviceURL={`service/information/${each._id}?serviceType=${each.category}`}
+                                            serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=booking&prevIndex=${prevIndex}&prevSlide=${prevSlide}`}
                                             bookingURL={`service/booking-type/${each._id}?bookingType=${each.category}`}
                                             imageStyle={'h-full w-full object-cover rounded-xl'}
                                             infoStyle={'py-2 px-1 font-bold'}/>
@@ -86,24 +119,24 @@ function AllServicesPage(){
                                             price={each.price}
                                             depart={`${each.location.country}, ${each.location.city}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
-                                            serviceURL={`service/information/${each._id}?serviceType=${each.category}`}
+                                            serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=booking&baseBookingURL=${true}&prevIndex=${prevIndex}&prevSlide=${prevSlide}`}
                                             bookingURL={`service/booking-type/${each._id}?bookingType=${each.category}`}
                                             imageStyle={'h-full w-full object-cover rounded-xl'}
                                             infoStyle={'py-4 px-2 font-bold'}/>
                                         )
                                     })
-                                }
+                                :<p>No Services Found</p>}
                             </div>
 
-                            <div className={'my-5 text-center '}>
-                                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
+                            <div className={'my-5 text-center'}>
+                                <Pagination handlePage={handlePage} prevIndex={prevIndex} prevSlide={prevSlide} handlePageArrow={handlePageArrow}/>
                             </div>
 
                         </div>
-                    )
-                }
-            </Await>
-        </Suspense>
+                    //)
+                //}
+           // </Await>
+       // </Suspense>
     )
 
 }
