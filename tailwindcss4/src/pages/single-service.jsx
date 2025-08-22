@@ -27,6 +27,9 @@ function SingleServicePage(props){
     const arrival = searchParams.get("arrival")
     const date = searchParams.get("date")
     const limitToTicket = searchParams.get("limitToTicket")
+    const view = searchParams.get("view")
+    const prevIndex = searchParams.get("prevIndex")
+    const prevSlide = searchParams.get("prevSlide")
     /*link applied conditionally if page rendered was not called under index page of categories, it is for dynamic routing to the categories opposed to routing to index page
         for smooth user experience e.g continue where left off in navigation
     */
@@ -35,8 +38,36 @@ function SingleServicePage(props){
     //therefore we have to check if serviceType which is category matches stays to route to index or any of the ones rendered dynamically
 
     const isTravel = ['flights','buses'].some((each)=>each === serviceType)
-    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchTerm}`:`../../..?searchTerm=${searchTerm}`
-    const conditionalLink2 = `../../../${serviceType}?depart=${depart}&arrival=${arrival}&date=${date}&limitToTicket=${limitToTicket}`
+
+    //const baseURL = baseBookingURL === 'true'|| isBaseBookingURL === true ? `../../..`:`../../../${serviceType}`
+
+    let allServicesBackLink;
+
+    if(view === 'booking'){
+
+        allServicesBackLink = `../../..?prevIndex=${prevIndex}&prevSlide=${prevSlide}`
+
+    }else if(view === 'categories'){
+
+        if(serviceType == 'stays'){
+
+            allServicesBackLink = `../../..?searchTerm=${searchTerm}&prevIndex=${prevIndex}&prevSlide=${prevSlide}`
+
+        }else{
+
+            if(isTravel){
+                allServicesBackLink = `../../../${serviceType}?depart=${depart}&arrival=${arrival}&date=${date}&limitToTicket=${limitToTicket}&prevIndex=${prevIndex}`
+            }else{
+                allServicesBackLink = `../../../${serviceType}?searchTerm=${searchTerm}&prevIndex=${prevIndex}`
+            }
+
+        }
+
+    }
+
+
+    const conditionalLink = serviceType !== 'stays' ? `../../../${serviceType}?searchTerm=${searchTerm}`:`../../..?searchTerm=${searchTerm}&prevIndex=${prevIndex}`
+    const conditionalLink2 = `?depart=${depart}&arrival=${arrival}&date=${date}&limitToTicket=${limitToTicket}&prevIndex=${prevIndex}`
 
     useEffect(()=>{
 
@@ -67,7 +98,7 @@ function SingleServicePage(props){
             {isLoaded && <div>
 
                 <div className={`${props.singleServiceStyle} ${value.containerStyle}  pt-10 relative`}>
-                    <NavLink to={`${!isTravel ? conditionalLink:conditionalLink2}`} relative={props.isRelative ? "path":"route"} className={'absolute top-1 left-1 px-5 py-1 rounded-tl-full text-white bg-black'}>Back</NavLink>
+                    <NavLink to={`${allServicesBackLink}`} relative={props.isRelative ? "path":"route"} className={'absolute top-1 left-1 px-5 py-1 rounded-tl-full text-white bg-black'}>Back</NavLink>
                     <div className={`h-[400px] rounded-xl relative`}>
 
                         <Image imageURL={singleService.imageURL} imageStyle={'h-full w-[100%] object-cover rounded-xl'}/>

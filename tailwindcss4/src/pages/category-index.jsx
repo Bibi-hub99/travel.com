@@ -12,12 +12,14 @@ function CategoryIndex(){
     const [servicesOffered,setServicesOffered] = useState([])
     const [isLoading,setIsLoading] = useState(false)
     const [searchParams,setSearchParams] = useSearchParams()
-
     const searchTextParam = searchParams.get('searchTerm')
+    const prevIndex = searchParams.get("prevIndex")
 
     const searchTextValue = searchTextParam !== null && searchTextParam !== "null" ? searchTextParam:''
+    const prevIndexValue = prevIndex !== null && prevIndex !== "null" ? prevIndex:0
 
     const [searchText,setSearchText] = useState(searchTextValue)
+    const [prevIndexSlide,setPrevIndexSlide] = useState(prevIndexValue)
 
 
     const handleChange = (evt)=>{
@@ -58,6 +60,7 @@ function CategoryIndex(){
                 setIsLoading(true)
                 const {data} = await findByCategory(searchTerm,category,skip,limit)
                 setServicesOffered(data.services)
+                setPrevIndexSlide(skip)
                 setIsLoading(false)
                 
             }catch(err){
@@ -66,7 +69,7 @@ function CategoryIndex(){
 
         }
 
-        findServices(searchText,'stays',0,2)
+        findServices(searchText,'stays',prevIndexSlide,2)
 
     },[])
 
@@ -121,7 +124,7 @@ function CategoryIndex(){
                         city={each.location.city}
                         price={each.price}
                         description={each.description}
-                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}`}
+                        serviceURL={`service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}&prevIndex=${prevIndexSlide}`}
                         bookingURL={`../service/booking-type/${each._id}?bookingType=${each.category}&view=categories&searchTerm=${searchText}`}
                         isRelative={true}
                         imageStyle={'h-full w-full object-cover rounded-xl'}

@@ -1,6 +1,6 @@
 //builds pagination links for showing items in portions and not overload the app
 import Button from "../components/button"
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import { FaAngleLeft } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa6";
 
@@ -12,10 +12,13 @@ function Pagination(props){
     const inActive =  allActive +'bg-gray text-black hover:bg-gray-400 '//applies to inactive
     const active = inActive +'bg-black text-white'//applie to active
 
+    const prevIndex = Number(props.prevIndex)
+    const prevSlide = Number(props.prevSlide)
+
     const [pages,setPages] = useState([
         {
             number:1,
-            isOpened:true,
+            isOpened:false,
             skip:0,
         },
         {
@@ -35,14 +38,60 @@ function Pagination(props){
         }
     ])
 
+    console.log(pages)
+
+    useEffect(()=>{
+
+        if(props.prevSlide > 4){
+            
+            setPages((oldValue) => {
+
+
+                return [
+
+                    {
+                        number:prevSlide - 2,
+                        isOpened:false,
+                        skip:prevIndex - 4
+                    },
+                    {
+                        number:prevSlide - 1,
+                        isOpened:false,
+                        skip:prevIndex - 2
+                    },
+                    {
+                        number:prevSlide,
+                        isOpened:false,
+                        skip:prevIndex
+                    },
+                    {
+                        number:prevSlide + 1,
+                        isOpened:false,
+                        skip:prevIndex + 2
+                    }
+
+                ]
+                
+            })
+        }
+
+
+        setPages((oldValue) => {
+            
+            return oldValue.map((each) => {
+                return each.skip === parseFloat(prevIndex) ? {...each,isOpened:true}:{...each}
+            })
+
+        })
+
+    },[prevIndex])
+    
+
     //function handles pagination logic and calls after the one on the parent component
-    const checkFn = (skip,elemNum)=>{
+    const checkFn = (skip,elemNum,prevIndex)=>{
 
 
-        props.handleClick(skip,elemNum).then(()=>{
-
-            console.log(elemNum + ' elemNum')
-
+        props.handleClick(skip,elemNum,prevIndex).then(()=>{
 
             setPages((oldValue)=>{
 
@@ -90,22 +139,39 @@ function Pagination(props){
 
             let x = [...oldValue]
 
+            console.log('debbuger 1')
+
             const findElem = x.find((each) => {
                 return each.isOpened === true
             })
+
+            console.log('debbuger 2')
+
 
             const firstElem = x.find((each) => {
                 return each
                 //returning just the first element without any logic delibately
             })
 
+            console.log('debbuger 3')
+
+
             const lastElemIndex = x.findIndex((each)=>{
                 return each.isOpened
             })
 
+            console.log('debbuger 4')
+
+
             const findLength = x.length
 
+            console.log('debbuger 5')
+
+
             let nextElem;//stores 
+
+            console.log('debbuger 6')
+
             
             if(direction === 'forward'){
                 nextElem = findElem.number + 1
@@ -116,6 +182,8 @@ function Pagination(props){
                     props.handlePageArrow(findElem.skip - 2)
                 }
             }
+
+            console.log('debbuger 7')
 
 
             if(nextElem > 0){
@@ -157,7 +225,7 @@ function Pagination(props){
                     key={`pages${index}`}
                     btnInnerText={each.number}
                     btnStyle={each.isOpened ? active : inActive}
-                    handleClick={()=>checkFn(each.skip,each.number)}
+                    handleClick={()=>checkFn(each.skip,each.number,props.prevIndex)}
                     />
                 )
             })

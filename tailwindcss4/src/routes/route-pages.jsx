@@ -51,7 +51,7 @@ const routerPages = createBrowserRouter([
                 children:[
                     {
                         index:true,
-                        loader:findServices,
+                        //loader:findServices,
                         element:(
                             <Suspense fallback={<Loading/>}>
                                 <AllServicesPage/>
@@ -165,15 +165,15 @@ const routerPages = createBrowserRouter([
                 path:'service-provider',
                 element:<ServiceProviderSignUp/>
             }
-        ]
+        ]                                                                                                                                                                                                                                                                                                                                                                                                                                        
     },
     {
         path:"booking/service/booking-type/:serviceID",
-        element:(
+        element:( 
             <Suspense>
                 <BookingService/>
             </Suspense>
-        )
+        )                                               
     },
     {
         path:'service-provider',
@@ -224,6 +224,10 @@ const routerPages = createBrowserRouter([
                 )
             }
         ]
+    },
+    {
+        path:'*',
+        element:<h1>Page not found</h1>
     }
 
 ])

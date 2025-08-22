@@ -31,26 +31,29 @@ const findByCategory = async(req,res,next) => {
 }
 
 const searchServices = async(req,res,next) => {
+
     try{
 
         const queryObj = {}
 
         const {searchTerm} = req.query
 
+        queryObj.$text = {$search:`\"${searchTerm}\"`}
+
         if(req.query.category){
             if(req.query.category !=="undefined" && req.query.category !== undefined){
                 queryObj.category = {$eq:req.query.category}
             }
         }
-
-        queryObj.$text = {$search:`\"${searchTerm}\"`}
+        
         const services = await serviceModel.searchServices(queryObj)
-        res.status(200).json({success:true,services:services})
 
+        res.status(200).json({success:true,services:services})
 
     }catch(err){
         next(err)
     }
+    
 }
 
 const findSingleService = async(req,res,next)=>{

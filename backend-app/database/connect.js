@@ -13,10 +13,10 @@ async function ConnectDB(){
 }
 
 
-//const mongoose = require('mongoose');
-/*const uri = `mongodb+srv://anxumalo000:${process.env.MONGO_PASSWORD}@cluster0.mb1i07x.mongodb.net/travel?retryWrites=true&w=majority&appName=Cluster0`;
+/*const mongoose = require('mongoose');
+const uri = `mongodb+srv://anxumalo000:${process.env.MONGO_PASSWORD}@cluster0.mb1i07x.mongodb.net/travel?retryWrites=true&w=majority&appName=Cluster0`;
 
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+const clientOptions = { serverApi: { version: '1', strict: false, deprecationErrors: true } };
 
 async function ConnectDB() {
   try {

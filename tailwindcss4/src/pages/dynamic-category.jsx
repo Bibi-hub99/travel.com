@@ -21,11 +21,16 @@ export default function DynamicCategory(){
     const [searchParams,setSearchParams] = useSearchParams()
 
     //we are extracting searchTerm from the back to link generated when clicking eye icon to view service to fetch the previously searched services for smooth UI/UX
+    /*
+    the way this works is we are extracting properties from the URL of the forward button to further propagate the state of the route and pagination
+    I discovered this on the 19th of Aug 2025 while diving deeper to react and react router 😁.
+     */
     const searchTerm = searchParams.get("searchTerm") !== null && searchParams.get("searchTerm") !== 'null' ? searchParams.get("searchTerm"):""
     const depart = searchParams.get("depart") !== null && searchParams.get("depart") !== "null" ? searchParams.get("depart"):""
     const arrival = searchParams.get("arrival") !== null && searchParams.get("arrival") !== "null" ? searchParams.get("arrival"):""
     const date = searchParams.get("date") !== null && searchParams.get("date") !== "null" ? searchParams.get('date'):""
     const limitToTicket = searchParams.get("limitToTicket") !== null && searchParams.get("limitToTicket") !== "null" ? searchParams.get("limitToTicket"):false
+    const prevSlideIndex = searchParams.get('prevIndex') !== null && searchParams.get('prevIndex') !== 'null' ? searchParams.get("prevIndex"):0
 
     const [searchText,setSearchText] = useState(searchTerm)
     const [searchTicket,setSearchTicket] = useState({
@@ -42,6 +47,10 @@ export default function DynamicCategory(){
         showForm:false,
         btnInnerText:'search ticket'
     })
+
+    const [prevIndex,setPrevIndex] = useState(prevSlideIndex)
+
+    console.log(prevIndex)
 
     //handles toggling the ticket search form
     const toggleForm = ()=>{
@@ -66,22 +75,24 @@ export default function DynamicCategory(){
 
     }
 
+    console.log(limitToSearchTicket === 'true' || limitToSearchTicket === true)
 
-    const handlePage = async (skip,index) => {
+    const handlePage = async (skip,index,prevIndex) => {
 
         try{
 
-
-            if(limitToSearchTicket === 'true'){
-
+            
+            if(limitToSearchTicket === 'true' || limitToSearchTicket === true){
                 const {depart,arrival,date} = searchTicket
                 const {data} = await searchTravelTickets({depart,arrival,category,date})
-                setServicesOffered([])
-
+                setServicesOffered(data.services)
             }else{
                 const {data} = await findByCategory('',category,skip,2)
                 setServicesOffered(data.services)
             }
+
+            setPrevIndex(skip)
+
 
          }catch(err){
             console.log(err)
@@ -95,7 +106,7 @@ export default function DynamicCategory(){
         try{
 
 
-            if(limitToSearchTicket === 'true'){
+            if(limitToSearchTicket === 'true' || limitToSearchTicket === true){
 
                 const {depart,arrival,date} = searchTicket
                 const {data} = await searchTravelTickets({depart,arrival,category,date})
@@ -107,6 +118,8 @@ export default function DynamicCategory(){
                 setServicesOffered(data.services)
 
             }
+            setPrevIndex(skip)
+            
 
         }catch(err){
             console.log(err)
@@ -125,11 +138,10 @@ export default function DynamicCategory(){
                 if(limitToSearchTicket === 'true'){
                     const {depart,arrival,date} = searchTicket
                     const {data} = await searchTravelTickets({depart,arrival,category,date})
-                    console.log(data)
                     setServicesOffered(data.services)
 
                 }else if(limitToSearchTicket !== "true"){
-                    const {data} = await findByCategory('',category,0,2)
+                    const {data} = await findByCategory('',category,prevIndex,2)
                     setServicesOffered(data.services)
                 }
                 setIsLoading(false)
@@ -237,7 +249,7 @@ export default function DynamicCategory(){
                             price={each.price}
                             depart={`${each.location.country}, ${each.location.city}, ${each.uniqueFeatures.tripFromAddress.streetName}, ${each.uniqueFeatures.tripFromAddress.postCode}`}
                             arrival={`${each.uniqueFeatures.tripToAddress.country}, ${each.uniqueFeatures.tripToAddress.city}, ${each.uniqueFeatures.tripToAddress.streetName}, ${each.uniqueFeatures.tripToAddress.postCode} `}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&depart=${searchTicket.depart}&arrival=${searchTicket.arrival}&date=${searchTicket.date}&limitToTicket=${limitToSearchTicket}`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&depart=${searchTicket.depart}&arrival=${searchTicket.arrival}&date=${searchTicket.date}&limitToTicket=${limitToSearchTicket}&prevIndex=${prevIndex}`}
                             bookingURL={`../../service/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
                             isRelative={true}
@@ -255,7 +267,7 @@ export default function DynamicCategory(){
                             city={each.city}
                             price={each.price}
                             description={each.description}
-                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}`}
+                            serviceURL={`../service/information/${each._id}?serviceType=${each.category}&view=categories&searchTerm=${searchText}&prevIndex=${prevIndex}`}
                             bookingURL={`../../services/booking-type/${each._id}?bookingType=${each.category}&view=categories`}
                             isRelative={true}
                             imageStyle={'h-full w-full object-cover rounded-xl'}
@@ -268,7 +280,7 @@ export default function DynamicCategory(){
 
             </div>
             <div className={'text-center my-5'}>
-                <Pagination handleClick={handlePage} handlePageArrow={handlePageArrow}/>
+                <Pagination handleClick={handlePage} prevIndex={prevIndex} handlePageArrow={handlePageArrow}/>
 
             </div>
         </div>
